@@ -35,7 +35,18 @@ const loginValidationRules = [
     handleValidationErrors
 ]
 
+const createBlogRules = [
+    body('title')
+        .notEmpty().withMessage('Title is Required').bail()
+        .isLength({min: 6}).withMessage('Title must be  atleast 6 Characters'),
+    body('content')
+        .notEmpty().withMessage('Content is Required').bail()
+        .isLength({min: 6}).withMessage('Content must be atleast 6 Characters'),
+    handleValidationErrors
+] 
+
 module.exports = {
     registerValidationRules,
-    loginValidationRules
+    loginValidationRules,
+    createBlogRules
 }

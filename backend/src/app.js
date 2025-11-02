@@ -19,10 +19,13 @@ app.use(cors({
 }));
 
 const authRouter = require('./routers/auth.route');
+const blogRouter = require('./routers/blog.route');
 
-app.use(express.json()); // to parse json bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Example limit change
 app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
+app.use('/api/blogs', blogRouter);
 
 module.exports = app;
