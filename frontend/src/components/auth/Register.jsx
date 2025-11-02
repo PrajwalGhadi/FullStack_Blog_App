@@ -170,7 +170,7 @@ const Register = () => {
             <p className="flex justify-center items-center gap-2 text-lg lg:text-xl">
               Already have an account?{" "}
               <Link
-                to={"/login"}
+                to={"/auth/login"}
                 className="font-bold text-[#ff7b00] hover:underline"
               >
                 Sign In

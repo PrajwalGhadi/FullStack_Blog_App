@@ -38,8 +38,25 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    async function createPost(formData) {
+        try {
+            const response = await fetch('http://localhost:3000/api/blogs/createBlog', {
+                method: "POST",
+                credentials: 'include',
+                body: formData
+            })
+
+            console.log(await response.json());
+
+
+            return response.json()
+        } catch(error) {
+            console.log('Frontend Create Post Function Error: ', error.message);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{userRegister, userLogin}}>
+        <AuthContext.Provider value={{userRegister, userLogin, createPost}}>
             {children}
         </AuthContext.Provider>
     )

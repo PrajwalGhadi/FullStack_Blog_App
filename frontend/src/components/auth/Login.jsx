@@ -88,7 +88,7 @@ const Login = () => {
           <div className="signUp flex justify-center items-center">
             <p className="flex justify-center items-center gap-2 text-lg lg:text-xl">
               Don't have an account?{" "}
-              <Link to={'/register'} className="font-bold text-[#ff7b00] hover:underline">Sign Up</Link>
+              <Link to={'/auth/register'} className="font-bold text-[#ff7b00] hover:underline">Sign Up</Link>
             </p>
           </div>
         </div>
