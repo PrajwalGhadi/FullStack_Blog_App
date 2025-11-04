@@ -27,7 +27,14 @@ const blogSchema = new mongoose.Schema(
       enum: ["technology", "design", "lifestyle", "productivity"], // ✅ Correct
     },
 
-    likes: {
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    views: {
       type: Number,
       default: 0,
       min: 0,

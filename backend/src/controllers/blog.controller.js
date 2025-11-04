@@ -4,8 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 
 async function getAllBlogs(req, res) {
   try {
-    const allBlogs = await blogModel.find().sort({createdAt: -1});
-    console.log(allBlogs)
+    const allBlogs = await blogModel.find().sort({ createdAt: -1 });
 
     res.status(200).json({ success: true, blogs: allBlogs });
   } catch (error) {
@@ -19,7 +18,7 @@ async function createBlog(req, res) {
     const { title, content, category } = req.body;
     const file = req.file;
 
-    console.log(req.user)
+    console.log(req.user);
 
     const result = await generateImageUrl(
       file.buffer,
@@ -44,7 +43,6 @@ async function createBlog(req, res) {
       message: "New Post Created Successfully",
       newBlog,
     });
-
   } catch (error) {
     console.log("CreateBlog Error:", error);
     res.status(500).json({
@@ -53,7 +51,41 @@ async function createBlog(req, res) {
     });
   }
 }
+
+async function getSingleBlog(req, res) {
+  try {
+    
+    const { blogId } = req.params
+
+    const getBlog = await blogModel.findOne({ _id: blogId });
+
+    if (!getBlog) {
+      return res.status(404).json({
+        success: false,
+        message: "404 Page Not Found"
+      })
+    }
+
+    res.status(200).json({ success: true, singleBlog: getBlog});
+  } catch (error) {
+    console.log("Error from GetSingleBlog controller: ", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+}
+
+async function blogLiked(req, res) {
+  try {
+
+  } catch(error) {
+    console.log('Error from BlogLiked Controller: ', error.message)
+  }
+}
+
 module.exports = {
   getAllBlogs,
   createBlog,
+  getSingleBlog,
 };
