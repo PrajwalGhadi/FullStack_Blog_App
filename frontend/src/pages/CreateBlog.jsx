@@ -39,7 +39,9 @@ const CreateBlog = () => {
   
       const result = await createPost(formData);
   
-      if (result.success) navigate('/')
+      if (!result.success && !result.isLogin) return navigate('/auth/login')
+
+      if (result.success) return navigate('/')
 
     } catch (error) {
       console.log('Error from handleSubmit', error.message)
@@ -48,18 +50,19 @@ const CreateBlog = () => {
   
   return (
     <>
-      <section className="flex justify-between gap-10 mx-70 h-[85vh] font-[LATO]">
+      <section className="flex justify-between gap-10 lg:mx-70 lg:h-[92vh] h-[88vh] font-[LATO] lg:overflow-hidden overflow-auto">
+        {/* Create Blog */}
         <div className="Inputs w-full flex flex-col gap-5 px-5 py-5">
-          <h1 className="text-center font-semibold text-4xl">Create Blog</h1>
+          <h1 className="text-center font-semibold lg:text-4xl text-2xl">Create Blog</h1>
           <form
             onSubmit={(e) => {
               handleSubmit(e);
             }}
-            className="w-full flex flex-col gap-5"
+            className="w-full flex flex-col lg:gap-5 gap-2"
           >
-            <div className="w-full flex gap-2">
-              <div>
-                <label htmlFor="image" className="text-xl font-bold">
+            <div className="w-full flex lg:gap-2">
+              <div className="w-[70%]">
+                <label htmlFor="image" className="text-lg lg:text-xl font-bold">
                   Thumbnail
                 </label>
                 <input
@@ -71,14 +74,14 @@ const CreateBlog = () => {
                     setThumbnail(e.target.files[0]);
                   }}
                   required
-                  className="text-xl flex"
+                  className="text-lg lg:text-xl flex"
                 />
               </div>
 
               <div className="btn w-full flex justify-end">
                 <button
                   type="submit"
-                  className="bg-[#ff7b00] w-[50%] p-2 lg:p-2 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl"
+                  className="bg-[#ff7b00] lg:w-[50%] w-[100%  ] p-2 lg:p-2 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl"
                 >
                   Create Blog
                 </button>
@@ -94,18 +97,18 @@ const CreateBlog = () => {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              className="w-full p-4 focus:outline-[#ff7b00] border-b text-xl"
+              className="w-full p-4 focus:outline-[#ff7b00] border-b text-lg lg:text-xl"
             />
             <Editor
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
               }}
-              className="h-[60vh]"
+              className="lg:h-[60vh] h-[50vh]"
             />
 
-            <fieldset className="flex gap-4">
-              <legend className="text-xl font-bold mb-2">Select Category</legend>
+            <fieldset className="flex gap-4 w-full flex-wrap">
+              <legend className="text-lg lg:text-xl font-bold mb-2">Select Category</legend>
 
               {categories.map((cat) => (
                 <div key={cat.id} className="flex items-center gap-1">
@@ -116,10 +119,10 @@ const CreateBlog = () => {
                     value={cat.value}
                     onChange={handleCategoryChange}
                     checked={selectedCategory === cat.value} // Compare with string
-                    className="w-5 h-5"
+                    className="lg:w-5 lg:h-5 h-3 w-3"
                     required // Makes one selection mandatory
                   />
-                  <label htmlFor={cat.id} className="text-xl font-semibold">
+                  <label htmlFor={cat.id} className="text-md lg:text-xl font-semibold">
                     {cat.label}
                   </label>
                 </div>
@@ -129,7 +132,9 @@ const CreateBlog = () => {
             <button type="submit"></button>
           </form>
         </div>
-        <div className="preview w-full p-5 overflow-auto">
+
+        {/* Preview Section */}
+        <div className="preview w-full p-5 overflow-auto hidden lg:flex lg:flex-col">
           <h1 className="text-center font-semibold text-4xl">Preview Blog</h1>
 
           <div className="w-full flex flex-col gap-4 overflow-auto">

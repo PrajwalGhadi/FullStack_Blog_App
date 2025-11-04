@@ -1,9 +1,9 @@
 import { createContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-
     async function userRegister (username, email, password) {
         try {
             const response = await fetch('http://localhost:3000/api/auth/register', {
@@ -46,17 +46,28 @@ export const AuthProvider = ({children}) => {
                 body: formData
             })
 
-            console.log(await response.json());
-
-
-            return response.json()
+            const data = await response.json();
+            
+            console.log(data)
+            return data
         } catch(error) {
             console.log('Frontend Create Post Function Error: ', error.message);
         }
     }
 
+    async function getAllPost() {
+        try {
+            const response = await fetch('http://localhost:3000/api/blogs/getAllBlogs');
+
+            const data = await response.json();
+
+            return data;
+        } catch (error) {
+            console.log('Frontend getAllPost function error: ', error.message);
+        }
+    }
     return (
-        <AuthContext.Provider value={{userRegister, userLogin, createPost}}>
+        <AuthContext.Provider value={{userRegister, userLogin, createPost, getAllPost}}>
             {children}
         </AuthContext.Provider>
     )

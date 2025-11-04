@@ -5,7 +5,7 @@ import BlogRoutes from "./routes/BlogRoutes";
 const App = () => {
   return (
     <>
-      <main className="w-full h-screen bg-[#F3F4F6]">
+      <main className="w-full lg:h-screen bg-[#F3F4F6]">
         <Routes>
           <Route path="/auth/*" element={<AuthRoutes />} />
           
