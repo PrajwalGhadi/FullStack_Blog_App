@@ -13,7 +13,8 @@ const cors = require("cors");
 app.use(cors({
     origin: {
         "http://localhost:3000": true,
-        "http://localhost:5173/": true
+        "http://localhost:5173/": true,
+        "http://192.168.1.13:5173/": true
     },
     credentials: true
 }));

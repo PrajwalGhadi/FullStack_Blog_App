@@ -11,7 +11,7 @@ router.get('/test', authMiddleware, (req, res) => {
   res.json({ message: 'Blog route working' });
 });
 
-router.get('/blogs', getAllBlogs);
+router.get('/getAllBlogs', getAllBlogs);
 
 // Create blog route with better error handling
 router.post('/createBlog', upload.single("image"), authMiddleware, createBlog)// Call your controller

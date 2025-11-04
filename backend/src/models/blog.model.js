@@ -17,6 +17,10 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
 
+    authorName: {
+      type: String,
+    },
+
     category: {
       type: String,
       required: true,
@@ -52,22 +56,21 @@ const blogSchema = new mongoose.Schema(
 blogSchema.pre("save", function (next) {
   try {
     if (this.isModified("content")) {
-    // Average reading time
-    const WPM = 200; // words per minute
+      // Average reading time
+      const WPM = 200; // words per minute
 
-    const wordCount = this.content.trim().split(/\s+/).length;
+      const wordCount = this.content.trim().split(/\s+/).length;
 
-    // read timestamps
-    const readTimeMinutes = Math.ceil(wordCount / WPM);
+      // read timestamps
+      const readTimeMinutes = Math.ceil(wordCount / WPM);
 
-    this.readTime = Math.max(1, readTimeMinutes);
+      this.readTime = Math.max(1, readTimeMinutes);
 
-    next();
-  }  
+      next();
+    }
   } catch (error) {
-    console.log('Error from prevSave blogModel',error.message)
+    console.log("Error from prevSave blogModel", error.message);
   }
-  
 });
 
 const blog = mongoose.model("blog", blogSchema);

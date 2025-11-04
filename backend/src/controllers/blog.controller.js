@@ -4,12 +4,13 @@ const { v4: uuidv4 } = require("uuid");
 
 async function getAllBlogs(req, res) {
   try {
-    const allBlogs = await blogModel.findAll();
+    const allBlogs = await blogModel.find().sort({createdAt: -1});
+    console.log(allBlogs)
 
     res.status(200).json({ success: true, blogs: allBlogs });
   } catch (error) {
     console.log("Error from getAllBlogs:", error.message);
-    res.stateus(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 }
 
@@ -17,6 +18,8 @@ async function createBlog(req, res) {
   try {
     const { title, content, category } = req.body;
     const file = req.file;
+
+    console.log(req.user)
 
     const result = await generateImageUrl(
       file.buffer,
@@ -28,7 +31,8 @@ async function createBlog(req, res) {
     const newBlog = await blogModel.create({
       title,
       content,
-      author: req.user,
+      author: req.user.id,
+      authorName: req.user.fullName,
       category,
       imageUrl: result.url,
     });

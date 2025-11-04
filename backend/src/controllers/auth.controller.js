@@ -34,7 +34,7 @@ const register = async (req, res) => {
     });
 
     // Generating JWT Token
-    const token = jwt.sign({ id: newuser._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: newuser._id, fullName: newuser.fullName || 'Anonymous' }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
 
@@ -52,7 +52,6 @@ const register = async (req, res) => {
       user: {
         id: newuser._id,
         username: newuser.username,
-        email: newuser.email,
       },
     });
   } catch (error) {
@@ -90,7 +89,7 @@ const login = async (req, res) => {
     }
 
     // Generating jwt token
-    const token = jwt.sign({ id: userExists._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: userExists._id, fullName: userExists.fullName || 'Anonymous' }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
 
@@ -113,7 +112,6 @@ const login = async (req, res) => {
       user: {
         id: userExists._id,
         username: userExists.username,
-        email: userExists.email,
       },
 
       token

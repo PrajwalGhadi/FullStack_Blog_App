@@ -8,13 +8,14 @@ async function authMiddleware(req, res, next) {
     if (!token) {
       return res.status(401).json({
         success: false,
+        isLogin: false,
         message: "Please Login or Register",
       });
     }
 
     const decode = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decode.id;
+    req.user = { id: decode.id, fullName: decode.fullName };
 
     next();
   } catch (error) {
