@@ -66,8 +66,20 @@ export const AuthProvider = ({children}) => {
             console.log('Frontend getAllPost function error: ', error.message);
         }
     }
+
+    async function getSingleBlog(blogId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/blogs/getSingleBlog/${blogId}`)
+
+            const data = await response.json();
+            
+            return data;
+        } catch (error) {
+            console.log('Error from getSinglePost: ', error.message);
+        }
+    }
     return (
-        <AuthContext.Provider value={{userRegister, userLogin, createPost, getAllPost}}>
+        <AuthContext.Provider value={{userRegister, userLogin, createPost, getAllPost, getSingleBlog}}>
             {children}
         </AuthContext.Provider>
     )

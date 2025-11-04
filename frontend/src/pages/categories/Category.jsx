@@ -112,7 +112,7 @@ const Category = () => {
                         }}
                       />
 
-                      <Link className="mt-auto text-[#ff7b00] text-lg lg:text-xl">
+                      <Link to={`/singleBlog/${blog?._id}`} className="mt-auto text-[#ff7b00] text-lg lg:text-xl">
                         {"Read More"}
                       </Link>
                     </div>
