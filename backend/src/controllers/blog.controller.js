@@ -1,4 +1,5 @@
 const blogModel = require("../models/blog.model");
+const userModel = require('../models/user.model')
 const generateImageUrl = require("../services/imageKit.service");
 const { v4: uuidv4 } = require("uuid");
 
@@ -6,7 +7,7 @@ async function getAllBlogs(req, res) {
   try {
     const allBlogs = await blogModel.find().sort({ createdAt: -1 });
 
-    res.status(200).json({ success: true, blogs: allBlogs });
+    res.status(200).json({ success: true, blogs: allBlogs});
   } catch (error) {
     console.log("Error from getAllBlogs:", error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -84,8 +85,21 @@ async function blogLiked(req, res) {
   }
 }
 
+async function fetchUserBlogs(req, res) {
+  try {
+    const user = await userModel.find({_id: req.user.id})
+    const blogs = await blogModel.find({author: req.user.id})
+    
+    res.status(200).json({ success: true, user: user, blogs: blogs})
+  } catch(error) {
+    console.log('Error from fetchUserBlogs: ', error.message);
+    res.status(500).json({success: true, message: 'Internal Server Error'})
+  }
+}
+
 module.exports = {
   getAllBlogs,
   createBlog,
   getSingleBlog,
+  fetchUserBlogs
 };
