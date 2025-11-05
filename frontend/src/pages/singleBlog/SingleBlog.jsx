@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { FaRegUser } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
@@ -12,6 +12,7 @@ const SingleBlog = () => {
   const param = useParams();
 
   const { getSingleBlog, getAllPost } = useContext(AuthContext);
+  const navigate = useNavigate()
 
   async function getBlog() {
     const response = await getSingleBlog(param.id);
@@ -25,7 +26,7 @@ const SingleBlog = () => {
 
   useEffect(() => {
     getBlog();
-  }, []);
+  }, [param]);
 
   return (
     <>
@@ -106,7 +107,7 @@ const SingleBlog = () => {
               {allBlog?.map((blog) => {
                 return (
                   <>
-                    <div className="flex justify-center items-center gap-4 cursor-pointer shadow-md rounded-2xl bg-amber-50 py-2 px-4">
+                    <div onClick={() => { navigate(`/singleBlog/${blog?._id}`) }} className="flex justify-center items-center gap-4 cursor-pointer shadow-md rounded-2xl bg-amber-50 py-2 px-4 hover:bg-amber-200">
                       <div className="border border-gray-400 lg:w-25 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
                         <FaRegUser className="text-xl lg:text-3xl text-gray-800" />
                       </div>

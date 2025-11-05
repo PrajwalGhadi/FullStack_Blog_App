@@ -16,6 +16,7 @@ const BlogRoutes = () => {
         <Route path="/singleBlog/:id" element = {<SingleBlog />} />
         <Route path="/createBlog" element={<CreateBlog />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/:dashboardName" element={<Dashboard />} />
       </Routes>
     </>
   );

@@ -9,8 +9,6 @@ const Category = () => {
   const { getAllPost } = useContext(AuthContext);
 
   const param = useParams();
-  console.log(param, param.categoryName);
-
   useEffect(() => {
     async function getAll() {
       try {
