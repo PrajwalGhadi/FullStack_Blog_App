@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import { FaRegUser } from "react-icons/fa";
-import { CiHeart } from "react-icons/ci";
+import { CiHeart, CiLock } from "react-icons/ci";
 import { MdOutlineShare } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 
@@ -11,7 +11,7 @@ const SingleBlog = () => {
   const [allBlog, setAllBlog] = useState();
   const param = useParams();
 
-  const { getSingleBlog, getAllPost } = useContext(AuthContext);
+  const { getSingleBlog, getAllPost, blogLiked } = useContext(AuthContext);
   const navigate = useNavigate()
 
   async function getBlog() {
@@ -21,6 +21,19 @@ const SingleBlog = () => {
     if (response.success && getAllBlog.success) {
       setSingleBlog(response.singleBlog);
       setAllBlog(getAllBlog.blogs?.filter(blog => blog?.category === response.singleBlog?.category && blog?._id !== response.singleBlog?._id));
+    }
+  }
+
+  async function handleLikedBtn(blogId) {
+    try {
+      const result = await blogLiked(blogId);
+
+      console.log(result)
+      if (!result?.isLogin) {
+        navigate('/auth/login')
+      }
+    } catch(error) {
+      console.log("Frontend Error from handledLikedBtn from SingleBlog Component: ", error.message);
     }
   }
 
@@ -56,7 +69,7 @@ const SingleBlog = () => {
               <div className="likeViews flex gap-5 mt-5  justify-between items-center py-4 px-6">
                 <h1 className="flex justify-center items-center gap-2 text-2xl text-gray-600 border-r border-gray-400 pr-5">
                   <CiHeart className="text-3xl" />
-                  <span>1.2k</span>
+                  <span>{singleBlog?.likes?.length}</span>
                 </h1>
                 <h1 className="flex justify-center items-center gap-2 text-2xl text-gray-600">
                   <IoEyeOutline className="text-3xl" />
@@ -135,6 +148,7 @@ const SingleBlog = () => {
               <button
                 type="submit"
                 className="bg-[#ff7b00] w-full p-2 lg:p-4 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl flex justify-center items-center gap-4"
+                onClick={()=> { handleLikedBtn(singleBlog?._id) }}
               >
                 <CiHeart className="text-3xl font-bold" /> Like this post
               </button>

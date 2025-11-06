@@ -10,6 +10,7 @@ import { MdLogout } from "react-icons/md";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import PostDashboard from "./Dashboards/PostDashboard";
 import UserDashboard from "./Dashboards/UserDashboard";
+import SettingDashboard from "./Dashboards/SettingDashboard";
 
 const Dashboard = () => {
   const { getUserBlog } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Dashboard = () => {
 
   async function getData() {
     const result = await getUserBlog();
-    console.log(result);
+    console.log('Result', result);
 
     if (!result.success) return navigate("/auth/login");
 
@@ -35,7 +36,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData();
-  }, [location]);
+  }, [param]);
 
   function isActive(path = "/dashboard/dashboard") {
     return location.pathname === path;
@@ -114,13 +115,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="mt-auto flex flex-col gap-2 py-5">
+          <div className="mt-auto flex flex-col gap-4 py-5">
             <div className="btn w-full mt-auto">
               <button
                 onClick={() => {
                   navigate("/createBlog");
                 }}
-                className="bg-[#ff7b00] w-full p-2 lg:p-4 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl"
+                className="bg-[#ff7b00] w-full p-2 lg:p-3 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-xl"
               >
                 Create New Post
               </button>
@@ -131,7 +132,7 @@ const Dashboard = () => {
                 onClick={() => {
                   navigate("/logout");
                 }}
-                className="w-full p-2 lg:p-4 rounded-lg lg:rounded-xl font-medium text-lg lg:text-2xl flex justify-start items-center gap-4 hover:border hover:border-[#ff7b00]"
+                className="w-full p-2 lg:p-3 rounded-lg lg:rounded-xl font-medium text-lg lg:text-xl flex justify-center items-center gap-4 hover:border hover:border-[#ff7b00]"
               >
                 <MdLogout /> Log Out
               </button>
@@ -141,7 +142,7 @@ const Dashboard = () => {
         <div className="w-full">
           {location?.pathname === '/dashboard' ? <UserDashboard user={user} blogs={blogs} /> : location.pathname === "/dashboard/myPosts" ? (
             <PostDashboard user={user} blogs={blogs} />
-          ) : null}
+          ) : location?.pathname === '/dashboard/settings' ? <SettingDashboard user={user} blogs={blogs}/>: null}
         </div>
       </section>
     </>
