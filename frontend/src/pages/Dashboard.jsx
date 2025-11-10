@@ -11,14 +11,20 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import PostDashboard from "./Dashboards/PostDashboard";
 import UserDashboard from "./Dashboards/UserDashboard";
 import SettingDashboard from "./Dashboards/SettingDashboard";
+import {formatCreatedAt} from '../components/DateConverter'
 
 const Dashboard = () => {
-  const { getUserBlog } = useContext(AuthContext);
+  // useContext functions
+  const { getUserBlog, userLogout } = useContext(AuthContext);
+
+  // React Router-Dom hooks
   const location = useLocation();
-  const [user, setUser] = useState(null);
-  const [blogs, setBlogs] = useState(null);
   const navigate = useNavigate();
   const param = useParams();
+
+  // local Component State
+  const [user, setUser] = useState(null);
+  const [blogs, setBlogs] = useState(null);
 
   console.log(param)
 
@@ -31,6 +37,18 @@ const Dashboard = () => {
     if (result.success) {
       setUser(result.user);
       setBlogs(result.blogs);
+    }
+  }
+
+  async function logout() {
+    try {
+      const response = await userLogout();
+
+      if (response.success) {
+        navigate('/auth/login')
+      }
+    } catch (error) {
+      console.log(error.message)
     }
   }
 
@@ -47,14 +65,14 @@ const Dashboard = () => {
       <section className="w-full lg:h-[85vh] h-[87.25vh] flex flex-col lg:flex-row gap-5 overflow-auto no-scrollbar">
         <aside className="lg:w-[15%] lg:h-full border-r border-gray-400 flex flex-col lg:px-5 gap-5 ">
           <div className="profile lg:flex gap-2 mt-4 justify-between items-center p-2 rounded-xl shadow-xl bg-[#facd7bde] hidden">
-            <div className="border border-gray-400 w-14 h-12 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
+            <div className="border border-gray-400 w-16 h-12 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
               <FaRegUser className="text-xl lg:text-xl text-gray-800" />
             </div>
 
-            <div className="flex flex-col">
-              <h1 className="font-semibold text-xl">{user?.username}</h1>
+            <div className="flex flex-col w-full">
+              <h1 className="font-semibold paragraph-body">{user?.map(user => user.username)}</h1>
               <p className="text-sm text-gray-600 italic">
-                Published on Aug 28 1999
+                {user?.map(user => formatCreatedAt(user?.createdAt))}
               </p>
             </div>
           </div>
@@ -130,7 +148,7 @@ const Dashboard = () => {
             <div className="btn w-full mt-auto">
               <button
                 onClick={() => {
-                  navigate("/logout");
+                  logout()  
                 }}
                 className="w-full p-3 rounded-lg font-medium paragraph-body flex justify-center items-center gap-2 hover:border hover:border-[#ff7b00]"
               >

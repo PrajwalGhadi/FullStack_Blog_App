@@ -50,7 +50,7 @@ const CreateBlog = () => {
   
   return (
     <>
-      <section className="flex justify-between gap-10 lg:mx-70 lg:h-[92vh] h-[88vh] font-[LATO] lg:overflow-hidden overflow-auto">
+      <section className="flex justify-between gap-10 lg:mx-70 lg:h-[92vh] h-[88vh] font-[LATO] lg:overflow-hidden overflow-auto py-2">
         {/* Create Blog */}
         <div className="Inputs w-full flex flex-col px-5 py-5">
           <h1 className="text-center font-semibold text-2xl">Create Blog</h1>
@@ -107,11 +107,11 @@ const CreateBlog = () => {
               className="h-[50vh]"
             />
 
-            <fieldset className="flex gap-4 w-full flex-wrap">
+            <fieldset className="flex gap-4 w-full flex-wrap py-2 lg:py-0">
               <legend className="text-lg font-bold mb-2">Select Category</legend>
 
               {categories.map((cat) => (
-                <div key={cat.id} className="flex items-center gap-1">
+                <div key={cat.id} className="flex items-center gap-1 border border-gray-400 p-2 rounded-lg">
                   <input
                     type="radio"
                     name="category" // Same name for all radio buttons

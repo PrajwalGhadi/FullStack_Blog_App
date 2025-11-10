@@ -38,6 +38,16 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function userLogout() {
+    try {
+      const result = await fetch("http://localhost:3000/api/auth/logout")
+      const data = await result.json()
+      return data
+    } catch (error) {
+      console.log('Error from userlogout function: ', error.message)
+    }
+  }
+
   async function createPost(formData) {
     try {
       const response = await fetch(
@@ -75,7 +85,10 @@ export const AuthProvider = ({ children }) => {
   async function getSingleBlog(blogId) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/blogs/getSingleBlog/${blogId}`
+        `http://localhost:3000/api/blogs/getSingleBlog/${blogId}`, {
+          method: "GET",
+          credentials: 'include'
+        }
       );
 
       const data = await response.json();
@@ -135,6 +148,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         userRegister,
         userLogin,
+        userLogout,
         createPost,
         getAllPost,
         getSingleBlog,

@@ -4,6 +4,7 @@ import { GoDotFill } from "react-icons/go";
 import { IoEyeOutline } from "react-icons/io5";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
+import {formatCreatedAt} from '../../components/DateConverter'
 
 const UserDashboard = ({ user, blogs }) => {
   const totalLikes =
@@ -85,7 +86,9 @@ const UserDashboard = ({ user, blogs }) => {
                 Total Views
               </h1>
               <h1 className="text-xl lg:text-2xl font-bold">
-                {blogs && blogs.length}
+                {blogs && blogs?.reduce((accumulator, blog)=> {
+                  return accumulator + blog?.views
+                }, 0)}
               </h1>
             </div>
             <IoEyeOutline className="font-bold text-xl lg:text-2xl text-[#ff7b00]" />
@@ -117,7 +120,7 @@ const UserDashboard = ({ user, blogs }) => {
                 Comments
               </h1>
               <h1 className="text-xl lg:text-2xl font-bold">
-                {blogs && blogs.length}
+                0
               </h1>
             </div>
             <FaRegCommentAlt className="font-bold text-lg lg:text-xl text-[#ff7b00]" />
@@ -157,7 +160,7 @@ const UserDashboard = ({ user, blogs }) => {
                     <h1 className="w-full text-green-500 font-normal">
                       Published
                     </h1>
-                    <h1 className="w-full font-medium">{Date.now(blog?.createdAt)}</h1>
+                    <h1 className="w-full font-medium">{formatCreatedAt(blog?.createdAt)}</h1>
                     <h1 className="w-[30%] flex justify-center items-center ">
                       <MdOutlineEdit className="text-2xl text-blue-500" />
                     </h1>
@@ -167,8 +170,8 @@ const UserDashboard = ({ user, blogs }) => {
                   </div>
 
                   <div className="flex justify-between py-2 px-2 border rounded-lg border-gray-300 text-md font-bold gap-2 lg:hidden flex-col">
-                    <div className="flex justify-between gap-2 py-2">
-                      <h1 className="w-full text-wrap">
+                    <div className="flex justify-between items-center gap-2 py-2">
+                      <h1 className="w-full text-wrap font-semibold">
                         {blog?.title.length > 50
                           ? blog?.title?.substring(0, 50)
                           : blog?.title}
@@ -176,19 +179,19 @@ const UserDashboard = ({ user, blogs }) => {
                       <h1 className="w-full capitalize font-medium text-gray-600 lg:flex hidden">
                         {blog?.category}
                       </h1>
-                      <h1 className="w-[30%] text-green-500 font-semibold">
+                      <h1 className="w-[30%] text-green-500 font-normal">
                         Published
                       </h1>
                     </div>
 
                     <div className="flex justify-between items-center gap-2 border-t border-gray-300 py-2">
-                      <h1 className="w-full text-gray-500 italic text-sm">
-                        {Date.now(blog?.createdAt)}
+                      <h1 className="w-full text-gray-500 italic font-normal text-sm">
+                        {formatCreatedAt  (blog?.createdAt)}
                       </h1>
-                      <h1 className="w-[30%] flex justify-center items-center gap-1 p-1 border border-gray-400 rounded-md text-md">
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 p-1 border border-gray-400 rounded-md text-md text-blue-500 font-normal">
                         <MdOutlineEdit className="text-xl" /> Edit
                       </h1>
-                      <h1 className="w-[30%] flex justify-center items-center gap-1 border border-gray-400 p-1 rounded-md text-md">
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 border border-gray-400 p-1 rounded-md text-md text-amber-600 font-normal">
                         <IoEyeOutline className="text-xl" /> View
                       </h1>
                     </div>

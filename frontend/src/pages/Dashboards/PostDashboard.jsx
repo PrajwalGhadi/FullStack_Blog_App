@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
@@ -6,10 +6,29 @@ import { MdOutlineEdit } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
+import { formatCreatedAt } from "../../components/DateConverter";
 
 const PostDashboard = ({ user, blogs }) => {
   const navigate = useNavigate();
   console.log(user, blogs);
+
+  const [filterBlogs, setFilterBlogs] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    if (blogs) {
+      const filtered = blogs.filter((blog) => {
+        if (searchInput.length > 0) {
+          return  blog.title.toLowerCase().includes(searchInput.toLowerCase())
+        }
+        else {
+          return blog
+        }
+      });
+      setFilterBlogs(filtered);
+    }
+  }, [searchInput, blogs]);
+
   return (
     <>
       <section className="lg:px-25 px-5 flex flex-col gap-2 w-full">
@@ -39,6 +58,10 @@ const PostDashboard = ({ user, blogs }) => {
               type="text"
               placeholder="Search by title..."
               className="border border-gray-400 w-full lg:py-3 py-2 lg:px-12 px-10 rounded-xl text-lg focus:outline-[#ff7b00] bg-white"
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+              }}
             />
           </form>
 
@@ -82,11 +105,15 @@ const PostDashboard = ({ user, blogs }) => {
             <h1 className="w-[30%]">Delete</h1>
           </div>
 
-          {blogs &&
-            blogs?.map((blog, index) => {
+          {filterBlogs &&
+            filterBlogs?.map((blog, index) => {
               return (
                 <>
-                  <div className={`lg:flex justify-between py-3 px-10 ${index === blogs.length - 1 ? '' : 'lg:border-b'}  border-gray-400 text-md font-bold gap-4 hidden`}>
+                  <div
+                    className={`lg:flex justify-between py-3 px-10 ${
+                      index === blogs.length - 1 ? "" : "lg:border-b"
+                    }  border-gray-400 text-md font-bold gap-4 hidden`}
+                  >
                     <h1 className="w-full">
                       {blog?.title.length > 20
                         ? blog?.title?.substring(0, 20)
@@ -98,8 +125,10 @@ const PostDashboard = ({ user, blogs }) => {
                     <h1 className="w-full text-green-500 font-normal">
                       Published
                     </h1>
-                    <h1 className="w-full font-medium">{Date.now(blog?.createdAt)}</h1>
-                    <h1 className="w-full font-normal">Views</h1>
+                    <h1 className="w-full font-medium">
+                      {formatCreatedAt(blog?.createdAt)}
+                    </h1>
+                    <h1 className="w-full font-normal">{blog?.views}</h1>
                     <h1 className="w-full font-normal">{blog?.likes.length}</h1>
                     <h1 className="w-[30%] flex justify-center items-center text-blue-500">
                       <MdOutlineEdit className="text-2xl" />
@@ -114,7 +143,7 @@ const PostDashboard = ({ user, blogs }) => {
 
                   <div className="flex justify-between py-2 px-2 border rounded-xl border-gray-400 text-md font-bold gap-2 lg:hidden flex-col">
                     <div className="flex justify-between gap-6 py-2">
-                      <h1 className="w-full text-wrap">
+                      <h1 className="w-full text-wrap font-semibold">
                         {blog?.title.length > 50
                           ? blog?.title?.substring(0, 50)
                           : blog?.title}
@@ -122,23 +151,31 @@ const PostDashboard = ({ user, blogs }) => {
                       <h1 className="w-full capitalize font-medium text-gray-600 lg:flex hidden">
                         {blog?.category}
                       </h1>
-                      <h1 className="w-[30%] text-green-500 font-semibold">
+                      <h1 className="w-[30%] text-green-500 font-normal">
                         Published
                       </h1>
                     </div>
 
                     <div className="flex justify-between items-center gap-2 border-t border-gray-400 py-2">
-                      <h1 className="w-full hidden">{Date.now(blog?.createdAt)}</h1>
-                      <h1 className="w-full flex gap-2 items-center text-md"><IoEyeOutline /> Views</h1>
-                      <h1 className="w-full flex gap-2 items-center text-md"><CiHeart /> {blog?.likes.length}</h1>
-                      <h1 className="w-[30%] flex justify-center items-center gap-1 p-1 border border-gray-400 rounded-md text-md">
+                      <h1 className="w-full hidden">
+                        {Date.now(blog?.createdAt)}
+                      </h1>
+                      <h1 className="w-full flex gap-2 items-center text-md font-medium">
+                        <IoEyeOutline className="text-2xl" />
+                        {blog?.views}
+                      </h1>
+                      <h1 className="w-full flex gap-2 items-center text-md font-medium">
+                        <CiHeart className="text-2xl" /> {blog?.likes.length}
+                      </h1>
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 p-1 border border-gray-400 rounded-md text-md text-blue-500 font-normal">
                         <MdOutlineEdit className="text-xl" /> Edit
                       </h1>
-                      <h1 className="w-[30%] flex justify-center items-center gap-1 border border-gray-400 p-1 rounded-md text-md">
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 border border-gray-400 p-1 rounded-md text-md text-amber-600 font-normal">
                         <IoEyeOutline className="text-xl" /> View
                       </h1>
-                      <h1 className="w-[30%] flex justify-center items-center gap-1 text-red-500 border p-1 rounded-md text-md">
-                        <MdDeleteOutline className="text-xl text-red-500" /> Delete
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 text-red-500 border p-1 rounded-md text-md font-normal">
+                        <MdDeleteOutline className="text-xl text-red-500" />{" "}
+                        Delete
                       </h1>
                     </div>
                   </div>

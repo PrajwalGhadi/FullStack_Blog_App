@@ -1,15 +1,49 @@
+import { useContext, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const Navbar = ({ children }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [searchInput, setSearchInput] = useState("");
+  const [allBlogs, setAllBlogs] = useState(null);
+  const [filterBlog, setFilterBlog] = useState(null);
+
+  const { getAllPost } = useContext(AuthContext);
+
+  // ✅ Move state update to useEffect
+  useEffect(() => {
+    if (allBlogs) {
+      const filtered = allBlogs.filter((blog) =>
+        blog.title.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilterBlog(filtered);
+    }
+  }, [searchInput, allBlogs]); // ✅ Re-run when searchInput or allBlogs changes
 
   // function to check isActive
   function isActive(path) {
     return location.pathname === path;
   }
+
+  useEffect(() => {
+    async function getBlogs() {
+      try {
+        const result = await getAllPost();
+        if (result.success) {
+          setAllBlogs(result.blogs);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+
+    getBlogs();
+  }, []);
 
   return (
     <>
@@ -36,7 +70,7 @@ const Navbar = ({ children }) => {
             className={`text-lg lg:text-lg px-4 py-1 transition-all duration-200 ${
               isActive("/createBlog")
                 ? "border-b-2 border-[#ff7b00] font-medium"
-                :  "text-gray-600"
+                : "text-gray-600"
             }`}
           >
             {" "}
@@ -54,7 +88,7 @@ const Navbar = ({ children }) => {
             Dashboard{" "}
           </Link>
         </div>
-        
+
         {/* Mobile View */}
         <div className="flex justify-center items-center gap-4 bg-[#F3F4F6] border-t border-gray-300 p-2 fixed bottom-0 left-0 w-full lg:hidden">
           <Link
@@ -93,15 +127,39 @@ const Navbar = ({ children }) => {
         </div>
 
         <div className="profile flex justify-between items-center gap-5 lg:gap-10">
-          <div className="search">
+          <div className="search relative">
             <form className="relative">
               <IoSearchOutline className="absolute text-2xl top-2 left-2 text-gray-600" />
               <input
                 type="text"
                 placeholder="Search articles..."
-                className="border border-gray-400 w-55 lg:w-75 py-1 px-10 rounded-xl text-lg focus:outline-[#ff7b00]"
+                className="border border-gray-400 w-55 lg:w-75 py-1 px-10 rounded-lg text-lg focus:outline-[#ff7b00] bg-gray-200"
+                value={searchInput}
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                }}
               />
             </form>
+
+            {searchInput.length > 0 ? (
+              <div className="absolute w-full py-1 max-h-75 z-2 bg-[#F3F4F6] px-2 overflow-auto flex flex-col gap-2">
+                {filterBlog &&
+                  filterBlog.map((blog) => {
+                    return (
+                      <Link
+                        key={blog.id}
+                        to={`/singleBlog/${blog?._id}`}
+                        onClick={()=> {setSearchInput('')}}
+                        className="w-full border border-gray-300 p-2 rounded-lg hover:bg-gray-200 block"
+                      >
+                        {blog?.title?.length > 50
+                          ? blog?.title?.substring(0, 50)
+                          : blog?.title}
+                      </Link>
+                    );
+                  })}
+              </div>
+            ) : null}
           </div>
           <div className="border border-gray-400 lg:w-12 lg:h-12 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
             <FaRegUser className="text-xl lg:text-2xl text-gray-800" />
