@@ -48,7 +48,7 @@ const Category = () => {
   if (error) {
     return (
       <div className="error-container flex justify-center items-center mt-20">
-        <p className="text-2xl text-red-500 p-5 border rounded-2xl shadow-lg shadow-red-700">
+        <p className="text-xl text-red-500 p-5 border rounded-2xl shadow-md shadow-red-700">
           Error loading blogs: It's Not You It's Us
         </p>
       </div>
@@ -59,12 +59,11 @@ const Category = () => {
   return (
     <>
       <section className="flex lg:mr-90 lg:h-[85vh] lg:px-30 px-5 lg:border-l lg:border-gray-400 flex-wrap  gap-10 lg:py-10 overflow-auto no-scrollbar w-full h-[88vh] py-5 s,sm:border">
-        {console.log(blogs)}
         {blogs.length > 0 ? (
           blogs && blogs?.map((blog) => {
             return (
               <>
-                <div className=" w-full lg:w-[18vw] lg:max-h-[45vh] flex flex-col border border-gray-300 hover:shadow-xl hover:shadow-gray-300 rounded-2xl">
+                <div className=" w-full lg:w-[18vw] max-h-[45vh] flex flex-col border border-gray-300 hover:shadow-xl hover:shadow-gray-300 rounded-2xl">
                   <div className="w-full h-[50vw] lg:h-[10vw]">
                     <img
                       src={blog?.imageUrl}
@@ -73,35 +72,35 @@ const Category = () => {
                     />
                   </div>
 
-                  <div className="w-full px-5 py-2 flex flex-col lg:gap-2">
-                    <div className="flex gap-10 justify-between items-center">
+                  <div className="w-full px-5 py-2 flex flex-col gap-3">
+                    <div className="flex justify-between items-center">
                       <div className="name_readtime flex gap-2 items-center w-full">
-                        <h1 className="text-md text-gray-500 italic">
+                        <h1 className="lg:text-md text-sm text-gray-500 italic">
                           {blog?.author?.length > 10
                             ? blog?.author.substring(0, 10)
                             : blog?.author}
                         </h1>
-                        <p className="text-md text-gray-500 italic w-full">
+                        <p className="lg:text-md text-sm text-gray-500 italic w-full">
                           {blog?.readTime} min read
                         </p>
                       </div>
 
-                      <div className="tags w-fit p-2 flex justify-end items-center">
-                        <h1 className="py-2 px-4 border w-fit rounded-2xl bg-[#ff7b00] text-white font-medium capitalize">
+                      <div className="tags w-fit  flex justify-end items-center">
+                        <h1 className="text-md py-2 px-4 border w-fit rounded-xl bg-[#ff7b00] text-white font-medium capitalize">
                           {blog?.category}
                         </h1>
                       </div>
                     </div>
 
-                    <div className="w-full h-fit flex flex-col lg:gap-2">
-                      <h1 className="text-lg lg:text-2xl font-bold">
+                    <div className="w-full h-fit flex flex-col gap-2">
+                      <h1 className="text-md lg:text-lg font-bold">
                         {blog?.title?.length > 50
                           ? blog?.title?.substring(0, 50)
                           : blog?.title}
                       </h1>
 
                       <div
-                        className="text-lg lg:text-xl text-gray-600"
+                        className="lg:text-md text-sm text-gray-600"
                         dangerouslySetInnerHTML={{
                           __html:
                             blog?.content.length > 70
@@ -110,7 +109,7 @@ const Category = () => {
                         }}
                       />
 
-                      <Link to={`/singleBlog/${blog?._id}`} className="mt-auto text-[#ff7b00] text-lg lg:text-xl">
+                      <Link to={`/singleBlog/${blog?._id}`} className="mt-auto text-[#ff7b00] text-lg">
                         {"Read More"}
                       </Link>
                     </div>
@@ -121,7 +120,7 @@ const Category = () => {
           })
         ) : (
           <div className="error-container flex justify-center items-start mt-20 w-full">
-            <p className="text-2xl text-red-500 p-5 border rounded-2xl shadow-lg shadow-red-700">
+            <p className="text-xl text-red-500 p-5 border rounded-2xl shadow-md shadow-red-700">
               Currently, there are no blogs available for {param.categoryName}.
             </p>
           </div>

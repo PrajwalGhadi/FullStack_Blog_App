@@ -44,84 +44,84 @@ const Dashboard = () => {
 
   return (
     <>
-      <section className="w-full h-[93.25vh] flex gap-5">
-        <aside className="w-[15%] h-full border-r border-gray-400 flex flex-col px-5 gap-10">
-          <div className="profile flex gap-4 mt-5 justify-between items-center py-4 px-3 rounded-4xl shadow-xl bg-[#facd7bde]">
-            <div className="border border-gray-400 lg:w-15 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-              <FaRegUser className="text-xl lg:text-3xl text-gray-800" />
+      <section className="w-full lg:h-[85vh] h-[87.25vh] flex flex-col lg:flex-row gap-5 overflow-auto no-scrollbar">
+        <aside className="lg:w-[15%] lg:h-full border-r border-gray-400 flex flex-col lg:px-5 gap-5 ">
+          <div className="profile lg:flex gap-2 mt-4 justify-between items-center p-2 rounded-xl shadow-xl bg-[#facd7bde] hidden">
+            <div className="border border-gray-400 w-14 h-12 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
+              <FaRegUser className="text-xl lg:text-xl text-gray-800" />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <h1 className="font-semibold text-2xl">{user?.username}</h1>
-              <p className="text-lg text-gray-600 italic">
+            <div className="flex flex-col">
+              <h1 className="font-semibold text-xl">{user?.username}</h1>
+              <p className="text-sm text-gray-600 italic">
                 Published on Aug 28 1999
               </p>
             </div>
           </div>
 
-          <div className="p-5 shadow-xl rounded-2xl">
-            <div className="flex flex-col gap-2">
+          <div className="lg:p-5 py-2 px-4 shadow-lg lg:rounded-xl w-full flex lg:relative fixed overflow-scroll no-scrollbar bg-[#F3F4F6]">
+            <div className="w-full flex flex-row justify-between lg:flex-col gap-2">
               {/* Each category has unique path */}
               <Link
                 to={"/dashboard"}
-                className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+                className={`lg:w-[85%] w-fit  flex justify-start items-center gap-2 text-sm p-2 rounded-lg ${
                   isActive("/dashboard")
                     ? "bg-[#ff7b00] text-white font-medium"
                     : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
-                <MdOutlineDashboard /> Dashboard
+                <MdOutlineDashboard className="text-xl"/> Dashboard
               </Link>
               <Link
                 to={"/dashboard/myPosts"}
-                className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+                className={`lg:w-[85%] w-fit flex justify-start items-center gap-2 text-sm p-2 rounded-lg ${
                   isActive("/dashboard/myPosts")
                     ? "bg-[#ff7b00] text-white font-medium"
                     : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
-                <MdOutlinePostAdd /> My Posts
+                <MdOutlinePostAdd className="text-xl"/> <span>My</span> posts
               </Link>
               <Link
                 to={"/dashboard/analytics"}
-                className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+                className={`lg:w-[85%] w-fit flex justify-start items-center gap-2 text-sm p-2 rounded-lg ${
                   isActive("/dashboard/analytics")
                     ? "bg-[#ff7b00] text-white font-medium"
                     : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
-                <SiGoogleanalytics /> Analytics
+                <SiGoogleanalytics className="text-xl"/> Analytics
               </Link>
               <Link
                 to={"/dashboard/comments"}
-                className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+                className={`lg:w-[85%] w-fit flex justify-start items-center gap-2 text-sm p-2 rounded-lg ${
                   isActive("/dashboard/comments")
                     ? "bg-[#ff7b00] text-white font-medium"
                     : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
-                <FaRegCommentAlt /> Comments
+                <FaRegCommentAlt className="text-xl"/> Comments
               </Link>
               <Link
                 to={"/dashboard/settings"}
-                className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+                className={`lg:w-[85%] w-fit flex justify-start items-center gap-2 text-sm p-2 rounded-lg ${
                   isActive("/dashboard/settings")
                     ? "bg-[#ff7b00] text-white font-medium"
                     : "hover:bg-gray-100 text-gray-600"
                 }`}
               >
-                <MdOutlineSettings /> Settings
+                <MdOutlineSettings className="text-xl"/> Settings
               </Link>
             </div>
           </div>
 
-          <div className="mt-auto flex flex-col gap-4 py-5">
+          <div className="mt-auto lg:flex flex-col gap-4 py-5 hidden">
             <div className="btn w-full mt-auto">
               <button
                 onClick={() => {
                   navigate("/createBlog");
                 }}
-                className="bg-[#ff7b00] w-full p-2 lg:p-3 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-xl"
+                className="bg-[#ff7b00] w-full p-3 rounded-lg text-white font-medium paragraph-body flex justify-center items-center gap-2"
               >
                 Create New Post
               </button>
@@ -132,14 +132,14 @@ const Dashboard = () => {
                 onClick={() => {
                   navigate("/logout");
                 }}
-                className="w-full p-2 lg:p-3 rounded-lg lg:rounded-xl font-medium text-lg lg:text-xl flex justify-center items-center gap-4 hover:border hover:border-[#ff7b00]"
+                className="w-full p-3 rounded-lg font-medium paragraph-body flex justify-center items-center gap-2 hover:border hover:border-[#ff7b00]"
               >
                 <MdLogout /> Log Out
               </button>
             </div>
           </div>
         </aside>
-        <div className="w-full">
+        <div className="w-full py-5 lg:mt-0 lg:py-0">
           {location?.pathname === '/dashboard' ? <UserDashboard user={user} blogs={blogs} /> : location.pathname === "/dashboard/myPosts" ? (
             <PostDashboard user={user} blogs={blogs} />
           ) : location?.pathname === '/dashboard/settings' ? <SettingDashboard user={user} blogs={blogs}/>: null}

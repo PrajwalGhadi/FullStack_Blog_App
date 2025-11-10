@@ -16,27 +16,27 @@ const Home = () => {
   }
 
   return (
-    <section className="flex justify-between items-center font-[LATO]">
+    <section className="flex lg:flex-row flex-col justify-between items-center font-[LATO]">
       {/* Categories Sidebar */}
-      <aside className="w-[20%] lg:h-[85vh] lg:flex py-15 hidden">
-        <div className="category w-full px-10 pr-15 flex flex-col gap-4">
-          <h1 className="text-2xl font-bold">Categories</h1>
+      <aside className="lg:w-[18%] w-full lg:h-[85vh] lg:flex lg:py-5 overflow-auto no-scrollbar lg:overflow-hidden">
+        <div className="category w-full lg:px-5 lg:pr-10 flex lg:flex-col items-center lg:items-start py-2">
+          <h1 className="text-lg font-bold lg:px-4 fixed lg:relative lg:bg-transparent bg-[#F3F4F6] py-2 px-1">Categories</h1>
 
-          <div className="flex flex-col gap-2">
-            {/* Each category has unique path */}
+          {/* Each category has unique path */}
+          <div className="w-full flex lg:flex-col gap-2 lg:px-4 lg:py-2 lg:shadow-lg rounded-lg mx-25 lg:mx-0">
             <Link
               to={"/category/all"}
-              className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+              className={`w-full flex justify-start items-center gap-2 text-xm p-2 rounded-lg ${
                 isActive("/category/all")
                   ? "bg-[#ff7b00] text-white font-medium"
                   : "hover:bg-gray-100 text-gray-600"
               }`}
             >
-              <BsStars /> All Topics
+              <BsStars /> All 
             </Link>
             <Link
               to={"/category/technology"}
-              className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+              className={`w-full flex justify-start items-center gap-2 text-xm p-2 rounded-lg ${
                 isActive("/category/technology")
                   ? "bg-[#ff7b00] text-white font-medium"
                   : "hover:bg-gray-100 text-gray-600"
@@ -46,7 +46,7 @@ const Home = () => {
             </Link>
             <Link
               to={"/category/design"}
-              className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+              className={`w-[85%] flex justify-start items-center gap-2 text-xm p-2 rounded-lg ${
                 isActive("/category/design")
                   ? "bg-[#ff7b00] text-white font-medium"
                   : "hover:bg-gray-100 text-gray-600"
@@ -56,7 +56,7 @@ const Home = () => {
             </Link>
             <Link
               to={"/category/lifestyle"}
-              className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+              className={`w-[85%] flex justify-start items-center gap-2 text-xm p-2 rounded-lg ${
                 isActive("/category/lifestyle")
                   ? "bg-[#ff7b00] text-white font-medium"
                   : "hover:bg-gray-100 text-gray-600"
@@ -66,7 +66,7 @@ const Home = () => {
             </Link>
             <Link
               to={"/category/productivity"}
-              className={`w-[85%] flex justify-start items-center gap-2 text-xl p-2 rounded-r-full ${
+              className={`w-[85%] flex justify-start items-center gap-2 text-xm p-2 rounded-lg ${
                 isActive("/category/productivity")
                   ? "bg-[#ff7b00] text-white font-medium"
                   : "hover:bg-gray-100 text-gray-600"
@@ -79,7 +79,7 @@ const Home = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="w-full lg:h-[85vh]">
+      <div className="w-full lg:h-[85vh] h-[81.25vh] overflow-auto no-scrollbar py-2 lg:py-0">
         <Category />
       </div>
     </section>

@@ -6,25 +6,30 @@ import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 
 const UserDashboard = ({ user, blogs }) => {
-  console.log(user);
+  const totalLikes =
+    blogs &&
+    blogs.reduce((accumulator, blog) => {
+      return accumulator + (blog?.likes?.length || 0);
+    }, 0);
+
   return (
-    <section className="px-25 flex flex-col gap-10">
-      <div className="py-5 flex justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-4xl">
+    <section className="lg:px-25 px-5 flex flex-col gap-5 overflow-auto no-scrollbar">
+      <div className="py-5 flex lg:flex-row flex-col justify-between gap-4">
+        <div className="flex flex-col w-full">
+          <h1 className="font-bold heading-smallheader">
             Welcome Back! {user?.map((user) => user?.username)} 👋
           </h1>
-          <p className="font-semibold text-2xl text-gray-500">
+          <p className="font-normal paragraph-body text-gray-500">
             Here's a snapshot of your blogging activity.
           </p>
         </div>
 
-        <div className="btn w-[25%] flex gap-10 mt-4">
+        <div className="btn w-full flex gap-5 lg:justify-end justify-center items-center">
           <button
             onClick={() => {
               navigate("/createBlog");
             }}
-            className="bg-[#ff7b00] w-full p-2 lg:p-4  rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl"
+            className="bg-[#ff7b00] w-fit p-3 rounded-lg text-white font-medium paragraph-body flex justify-center items-center gap-2"
           >
             Create New Post
           </button>
@@ -33,87 +38,101 @@ const UserDashboard = ({ user, blogs }) => {
             onClick={() => {
               navigate("/createBlog");
             }}
-            className="w-full p-2 lg:p-4 rounded-lg lg:rounded-xl font-medium text-lg lg:text-2xl border border-[#ff7b00]"
+            className="w-fit p-3 rounded-lg border border-amber-400 font-medium paragraph-body flex justify-center items-center gap-2"
           >
             Manage Post
           </button>
         </div>
       </div>
 
-      <div className="  flex justify-between gap-10 px-25">
-        <div className="w-[20%] h-[22vh] shadow-xl rounded-4xl p-8 flex flex-col gap-5">
-          <div className="flex gap-10 justify-between items-start">
+      <div className="w-full flex justify-between items-center lg:gap-10 gap-5 lg:px-25 flex-wrap">
+        <div className="w-[47%] lg:w-[17%] min-h-[15vh] h-[17vh] shadow-xl rounded-2xl lg:p-4 p-2 flex flex-col lg:gap-5 ">
+          <div className="flex gap-5 lg:gap-10 justify-between items-start">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-gray-500">Total Posts</h1>
-              <h1 className="text-5xl font-bold">{blogs && blogs.length}</h1>
+              <h1 className=" text-md lg:text-xl font-bold text-gray-500">
+                Total Posts
+              </h1>
+              <h1 className=" text-xl lg:text-2xl font-bold">
+                {blogs && blogs.length}
+              </h1>
             </div>
-            <MdOutlinePostAdd className="font-bold text-4xl text-[#ff7b00]" />
+            <MdOutlinePostAdd className=" font-bold text-xl lg:text-2xl text-[#ff7b00]" />
           </div>
           <div className="flex justify-between items-center mt-auto">
-            <div className="flex justify-center items-center gap-3">
+            <div className="flex justify-center items-center gap-2">
               <GoDotFill className="text-green-500" />
               <div>
-                <h1 className="text-xl">{blogs && blogs.length}</h1>
-                <p className="text-gray-500 text-xl">Published</p>
+                <h1 className="text-lg">{blogs && blogs.length}</h1>
+                <p className="text-gray-500 text-sm">Published</p>
               </div>
             </div>
             <div>
-              <div className="flex justify-center items-center gap-3">
+              <div className="flex justify-center items-center gap-2">
                 <GoDotFill className="text-yellow-500" />
                 <div>
-                  <h1 className="text-xl">{blogs && blogs.length}</h1>
-                  <p className="text-gray-500 text-xl">Draft</p>
+                  <h1 className="text-lg">{blogs && blogs.length}</h1>
+                  <p className="text-gray-500 text-sm">Draft</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="w-[20%] h-[22vh] shadow-xl rounded-4xl p-8 flex flex-col gap-5">
-          <div className="flex gap-10 justify-between items-start">
+        <div className="w-[47%] lg:w-[17%] min-h-[15vh] h-[17vh] shadow-xl rounded-2xl lg:p-4 p-2 flex flex-col lg:gap-5 ">
+          <div className="flex gap-5 lg:gap-10 justify-between items-start">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-gray-500">Total Views</h1>
-              <h1 className="text-5xl font-bold">{blogs && blogs.length}</h1>
+              <h1 className="text-md lg:text-xl font-bold text-gray-500">
+                Total Views
+              </h1>
+              <h1 className="text-xl lg:text-2xl font-bold">
+                {blogs && blogs.length}
+              </h1>
             </div>
-            <IoEyeOutline className="font-bold text-4xl text-[#ff7b00]" />
+            <IoEyeOutline className="font-bold text-xl lg:text-2xl text-[#ff7b00]" />
           </div>
           <div className="flex justify-between items-center mt-auto">
-            <p className="text-green-500 text-xl">+12% from last month</p>
+            <p className="text-green-500 text-sm">+12% from last month</p>
           </div>
         </div>
 
-        <div className="w-[20%] h-[22vh] shadow-xl rounded-4xl p-8 flex flex-col gap-5">
-          <div className="flex gap-10 justify-between items-start">
+        <div className="w-[47%] lg:w-[17%] min-h-[15vh] h-[17vh] shadow-xl rounded-2xl lg:p-4 p-3 flex flex-col gap-5 ">
+          <div className="flex gap-5 lg:gap-10 justify-between items-start">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-gray-500">Total Likes</h1>
-              <h1 className="text-5xl font-bold">{blogs && blogs.length}</h1>
+              <h1 className="text-md lg:text-xl font-bold text-gray-500">
+                Total Likes
+              </h1>
+              <h1 className="text-xl lg:text-2xl font-bold">{totalLikes}</h1>
             </div>
-            <AiOutlineLike className="font-bold text-4xl text-[#ff7b00]" />
+            <AiOutlineLike className="font-bold text-lg lg:text-2xl text-[#ff7b00]" />
           </div>
           <div className="flex justify-between items-center mt-auto">
-            <p className="text-green-500 text-xl">+12% from last month</p>
+            <p className="text-green-500 text-sm">+12% from last month</p>
           </div>
         </div>
 
-        <div className="w-[20%] h-[22vh] shadow-xl rounded-4xl p-8 flex flex-col gap-5">
-          <div className="flex gap-10 justify-between items-start">
+        <div className="w-[47%] lg:w-[17%] min-h-[15vh] h-[17vh] shadow-xl rounded-2xl lg:p-4 p-3 flex flex-col lg:gap-5 ">
+          <div className="flex gap-5 lg:gap-10 justify-between items-start">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold text-gray-500">Comments</h1>
-              <h1 className="text-5xl font-bold">{blogs && blogs.length}</h1>
+              <h1 className="text-md lg:text-xl font-bold text-gray-500">
+                Comments
+              </h1>
+              <h1 className="text-xl lg:text-2xl font-bold">
+                {blogs && blogs.length}
+              </h1>
             </div>
-            <FaRegCommentAlt className="font-bold text-4xl text-[#ff7b00]" />
+            <FaRegCommentAlt className="font-bold text-lg lg:text-xl text-[#ff7b00]" />
           </div>
           <div className="flex justify-between items-center mt-auto">
-            <p className="text-gray-500 text-xl">32 new comments waiting </p>
+            <p className="text-gray-500 text-sm flex">32 new comments</p>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-5">
-        <h1 className="font-bold text-4xl">Recent Blogs</h1>
+        <h1 className="font-bold heading-smallheader">Recent Blogs</h1>
 
-        <div className="w-full border border-gray-400 shadow-lg rounded-2xl">
-          <div className="flex justify-between py-5 px-10 border-b border-gray-400 text-xl font-bold gap-4 bg-amber-400 rounded-2xl">
+        <div className="w-full rounded-2xl flex flex-col gap-5 lg:gap-0">
+          <div className="lg:flex justify-between py-4 px-10 border-gray-300 text-lg font-semibold gap-2 bg-amber-400 rounded-xl hidden">
             <h1 className="w-full">Title</h1>
             <h1 className="w-full">Category</h1>
             <h1 className="w-full">Status</h1>
@@ -126,25 +145,53 @@ const UserDashboard = ({ user, blogs }) => {
             blogs?.map((blog) => {
               return (
                 <>
-                  <div className="flex justify-between py-5 px-10 border-b border-gray-400 text-xl font-bold gap-4">
-                    <h1 className="w-full">
+                  <div className="lg:flex justify-between py-4 px-10 border-b border-gray-300 text-md font-bold gap-2 hidden rounded-2xl">
+                    <h1 className="w-full font-semibold">
                       {blog?.title.length > 20
                         ? blog?.title?.substring(0, 20)
                         : blog?.title}
                     </h1>
-                    <h1 className="w-full capitalize font-medium text-gray-600">
+                    <h1 className="w-full capitalize font-normal text-gray-900">
                       {blog?.category}
                     </h1>
-                    <h1 className="w-full text-green-500 font-semibold">
+                    <h1 className="w-full text-green-500 font-normal">
                       Published
                     </h1>
-                    <h1 className="w-full">{Date.now(blog?.createdAt)}</h1>
+                    <h1 className="w-full font-medium">{Date.now(blog?.createdAt)}</h1>
                     <h1 className="w-[30%] flex justify-center items-center ">
-                      <MdOutlineEdit className="text-2xl" />
+                      <MdOutlineEdit className="text-2xl text-blue-500" />
                     </h1>
                     <h1 className="w-[30%] flex justify-center items-center">
-                      <IoEyeOutline className="text-2xl" />
+                      <IoEyeOutline className="text-2xl text-amber-600" />
                     </h1>
+                  </div>
+
+                  <div className="flex justify-between py-2 px-2 border rounded-lg border-gray-300 text-md font-bold gap-2 lg:hidden flex-col">
+                    <div className="flex justify-between gap-2 py-2">
+                      <h1 className="w-full text-wrap">
+                        {blog?.title.length > 50
+                          ? blog?.title?.substring(0, 50)
+                          : blog?.title}
+                      </h1>
+                      <h1 className="w-full capitalize font-medium text-gray-600 lg:flex hidden">
+                        {blog?.category}
+                      </h1>
+                      <h1 className="w-[30%] text-green-500 font-semibold">
+                        Published
+                      </h1>
+                    </div>
+
+                    <div className="flex justify-between items-center gap-2 border-t border-gray-300 py-2">
+                      <h1 className="w-full text-gray-500 italic text-sm">
+                        {Date.now(blog?.createdAt)}
+                      </h1>
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 p-1 border border-gray-400 rounded-md text-md">
+                        <MdOutlineEdit className="text-xl" /> Edit
+                      </h1>
+                      <h1 className="w-[30%] flex justify-center items-center gap-1 border border-gray-400 p-1 rounded-md text-md">
+                        <IoEyeOutline className="text-xl" /> View
+                      </h1>
+                    </div>
                   </div>
                 </>
               );

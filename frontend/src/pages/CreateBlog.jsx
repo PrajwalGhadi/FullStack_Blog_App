@@ -52,8 +52,8 @@ const CreateBlog = () => {
     <>
       <section className="flex justify-between gap-10 lg:mx-70 lg:h-[92vh] h-[88vh] font-[LATO] lg:overflow-hidden overflow-auto">
         {/* Create Blog */}
-        <div className="Inputs w-full flex flex-col gap-5 px-5 py-5">
-          <h1 className="text-center font-semibold lg:text-4xl text-2xl">Create Blog</h1>
+        <div className="Inputs w-full flex flex-col px-5 py-5">
+          <h1 className="text-center font-semibold text-2xl">Create Blog</h1>
           <form
             onSubmit={(e) => {
               handleSubmit(e);
@@ -62,7 +62,7 @@ const CreateBlog = () => {
           >
             <div className="w-full flex lg:gap-2">
               <div className="w-[70%]">
-                <label htmlFor="image" className="text-lg lg:text-xl font-bold">
+                <label htmlFor="image" className="text-lg font-bold">
                   Thumbnail
                 </label>
                 <input
@@ -74,16 +74,16 @@ const CreateBlog = () => {
                     setThumbnail(e.target.files[0]);
                   }}
                   required
-                  className="text-lg lg:text-xl flex"
+                  className="text-lg flex"
                 />
               </div>
 
               <div className="btn w-full flex justify-end">
                 <button
                   type="submit"
-                  className="bg-[#ff7b00] lg:w-[50%] w-[100%  ] p-2 lg:p-2 rounded-lg lg:rounded-xl text-white font-medium text-lg lg:text-2xl"
+                  className="bg-[#ff7b00] py-2 px-6 rounded-lg text-white font-medium text-lg"
                 >
-                  Create Blog
+                  Create
                 </button>
               </div>
             </div>
@@ -97,18 +97,18 @@ const CreateBlog = () => {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              className="w-full p-4 focus:outline-[#ff7b00] border-b text-lg lg:text-xl"
+              className="w-full p-2 focus:outline-[#ff7b00] border-b text-lg"
             />
             <Editor
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
               }}
-              className="lg:h-[60vh] h-[50vh]"
+              className="h-[50vh]"
             />
 
             <fieldset className="flex gap-4 w-full flex-wrap">
-              <legend className="text-lg lg:text-xl font-bold mb-2">Select Category</legend>
+              <legend className="text-lg font-bold mb-2">Select Category</legend>
 
               {categories.map((cat) => (
                 <div key={cat.id} className="flex items-center gap-1">
@@ -122,7 +122,7 @@ const CreateBlog = () => {
                     className="lg:w-5 lg:h-5 h-3 w-3"
                     required // Makes one selection mandatory
                   />
-                  <label htmlFor={cat.id} className="text-md lg:text-xl font-semibold">
+                  <label htmlFor={cat.id} className="text-md font-semibold">
                     {cat.label}
                   </label>
                 </div>

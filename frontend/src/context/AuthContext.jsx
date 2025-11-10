@@ -115,6 +115,21 @@ export const AuthProvider = ({ children }) => {
       console.log('Frontend Error from userLiked Function: ', error.message)
     }
   }
+
+  async function getLoggedInUser() {
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/getLoggedInUser', {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.log('Frontend Error  from getLoggedInUser: ', error.message)
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -124,7 +139,8 @@ export const AuthProvider = ({ children }) => {
         getAllPost,
         getSingleBlog,
         getUserBlog,
-        blogLiked
+        blogLiked,
+        getLoggedInUser
       }}
     >
       {children}
