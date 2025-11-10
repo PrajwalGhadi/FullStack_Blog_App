@@ -141,8 +141,18 @@ const logout = (req, res) => {
   }
 };
 
+async function getLoggedInUser(req, res) {
+  try {
+    const user = await userModel.findOne({_id: req.user.id })
+    res.status(200).json({ success: true, user: user})
+  } catch (error) {
+    console.log('Error from getLoggedInUser Controller: ', error.message)
+  } 
+};
+
 module.exports = {
   register,
   login,
   logout,
+  getLoggedInUser
 };

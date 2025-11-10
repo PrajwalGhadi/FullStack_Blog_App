@@ -1,5 +1,5 @@
 const blogModel = require("../models/blog.model");
-const userModel = require('../models/user.model')
+const userModel = require("../models/user.model");
 const generateImageUrl = require("../services/imageKit.service");
 const { v4: uuidv4 } = require("uuid");
 
@@ -7,7 +7,7 @@ async function getAllBlogs(req, res) {
   try {
     const allBlogs = await blogModel.find().sort({ createdAt: -1 });
 
-    res.status(200).json({ success: true, blogs: allBlogs});
+    res.status(200).json({ success: true, blogs: allBlogs });
   } catch (error) {
     console.log("Error from getAllBlogs:", error.message);
     res.status(500).json({ success: false, message: "Internal Server Error" });
@@ -55,19 +55,18 @@ async function createBlog(req, res) {
 
 async function getSingleBlog(req, res) {
   try {
-    
-    const { blogId } = req.params
+    const { blogId } = req.params;
 
     const getBlog = await blogModel.findOne({ _id: blogId });
 
     if (!getBlog) {
       return res.status(404).json({
         success: false,
-        message: "404 Page Not Found"
-      })
+        message: "404 Page Not Found",
+      });
     }
 
-    res.status(200).json({ success: true, singleBlog: getBlog});
+    res.status(200).json({ success: true, singleBlog: getBlog });
   } catch (error) {
     console.log("Error from GetSingleBlog controller: ", error.message);
     res.status(500).json({
@@ -79,21 +78,42 @@ async function getSingleBlog(req, res) {
 
 async function blogLiked(req, res) {
   try {
+    const blogId = req.params.id;
+    const userId = req.user.id;
 
-  } catch(error) {
-    console.log('Error from BlogLiked Controller: ', error.message)
+    const blog = await blogModel.findOne({ _id: blogId, likes: userId });
+
+    let updateLike = {};
+
+    if (blog) {
+      updateLike = { $pull: { likes: userId } };
+    } else {
+      updateLike = { $push: { likes: userId } };
+    }
+
+    const updatedBlog = await blogModel.findOneAndUpdate(
+      { _id: blogId },
+      updateLike,
+      { new: true } // always return the new document
+    );
+
+    console.log(updatedBlog, blog)
+
+    res.status(200).json({success: true, message: !blog ? "Liked" : "Disliked"})
+  } catch (error) {
+    console.log("Error from blogLiked Controller: ", error.message);
   }
 }
 
 async function fetchUserBlogs(req, res) {
   try {
-    const user = await userModel.find({_id: req.user.id})
-    const blogs = await blogModel.find({author: req.user.id})
-    
-    res.status(200).json({ success: true, user: user, blogs: blogs})
-  } catch(error) {
-    console.log('Error from fetchUserBlogs: ', error.message);
-    res.status(500).json({success: true, message: 'Internal Server Error'})
+    const user = await userModel.find({ _id: req.user.id });
+    const blogs = await blogModel.find({ author: req.user.id });
+
+    res.status(200).json({ success: true, user: user, blogs: blogs });
+  } catch (error) {
+    console.log("Error from fetchUserBlogs: ", error.message);
+    res.status(500).json({ success: true, message: "Internal Server Error" });
   }
 }
 
@@ -101,5 +121,6 @@ module.exports = {
   getAllBlogs,
   createBlog,
   getSingleBlog,
-  fetchUserBlogs
+  fetchUserBlogs,
+  blogLiked,
 };

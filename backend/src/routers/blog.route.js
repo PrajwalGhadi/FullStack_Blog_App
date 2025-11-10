@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllBlogs, createBlog, getSingleBlog, fetchUserBlogs } = require('../controllers/blog.controller');
+const { getAllBlogs, createBlog, getSingleBlog, fetchUserBlogs, blogLiked } = require('../controllers/blog.controller');
 const  authMiddleware = require('../middlewares/auth.middleware')
 const multer = require('multer')
 
@@ -13,9 +13,11 @@ router.get('/test', authMiddleware, (req, res) => {
 
 router.get('/getAllBlogs', getAllBlogs);
 
-router.get('/getSingleBlog/:blogId', getSingleBlog)
+router.get('/getSingleBlog/:blogId', getSingleBlog);
 
-router.get('/getUserBlog/:id', authMiddleware, fetchUserBlogs)
+router.get('/getUserBlog/:id', authMiddleware, fetchUserBlogs);
+
+router.get('/blogLiked/:id', authMiddleware, blogLiked);
 
 // Create blog route with better error handling
 router.post('/createBlog', upload.single("image"), authMiddleware, createBlog)// Call your controller
