@@ -34,9 +34,13 @@ const register = async (req, res) => {
     });
 
     // Generating JWT Token
-    const token = jwt.sign({ id: newuser._id, fullName: newuser.fullName || 'Anonymous' }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { id: newuser._id, fullName: newuser.fullName || "Anonymous" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     //Setting Cookie
     res.cookie("token", token, {
@@ -62,12 +66,11 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    
     if (req.user) {
       return res.status(200).json({
         success: true,
-        message: 'User Already loggedIn'
-      })
+        message: "User Already loggedIn",
+      });
     }
 
     const { username, password } = req.body;
@@ -89,9 +92,13 @@ const login = async (req, res) => {
     }
 
     // Generating jwt token
-    const token = jwt.sign({ id: userExists._id, fullName: userExists.fullName || 'Anonymous' }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { id: userExists._id, fullName: userExists.fullName || "Anonymous" },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     const isProduction = process.env.NODE_ENV === "production";
 
@@ -114,7 +121,7 @@ const login = async (req, res) => {
         username: userExists.username,
       },
 
-      token
+      token,
     });
   } catch (error) {
     console.log("Login Controller Error: ", error.message);
@@ -126,9 +133,16 @@ const logout = (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      secure: true,
+      expires: new Date(0), // ✅ Immediate expiration (better than maxAge: 1)
       sameSite: "none",
-      maxAge: 0,
+      secure: true,
+    });
+
+    // ✅ Destroy session if you're using sessions
+    req.session.destroy((err) => {
+      if (err) {
+        console.log("Session destruction error:", err);
+      }
     });
 
     res.status(200).json({
@@ -143,16 +157,16 @@ const logout = (req, res) => {
 
 async function getLoggedInUser(req, res) {
   try {
-    const user = await userModel.findOne({_id: req.user.id })
-    res.status(200).json({ success: true, user: user})
+    const user = await userModel.findOne({ _id: req.user.id });
+    res.status(200).json({ success: true, user: user });
   } catch (error) {
-    console.log('Error from getLoggedInUser Controller: ', error.message)
-  } 
-};
+    console.log("Error from getLoggedInUser Controller: ", error.message);
+  }
+}
 
 module.exports = {
   register,
   login,
   logout,
-  getLoggedInUser
+  getLoggedInUser,
 };

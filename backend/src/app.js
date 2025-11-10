@@ -1,6 +1,21 @@
 const express = require("express");
 const app = express();
 
+const session = require('express-session')
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'a-very-long-secret-key-minimum-32-chars',
+  resave: true, // ⭐ IMPORTANT: Set to true
+  saveUninitialized: true, // ⭐ IMPORTANT: Set to true
+  cookie: { 
+    secure: false, // false for HTTP development
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    httpOnly: true,
+    sameSite: 'lax' // ⭐ ADD THIS for cross-origin requests
+  },
+  // ⭐ ADD SESSION STORE (Required for persistence)
+  store: new session.MemoryStore() // For development
+}));
+
 const dotenv = require("dotenv");
 dotenv.config();
 

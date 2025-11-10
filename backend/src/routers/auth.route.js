@@ -8,7 +8,7 @@ const {register, login, logout, getLoggedInUser}  = require('../controllers/auth
 
 router.post('/register', registerValidationRules, register);
 router.post('/login', loginValidationRules, login);
-router.post('/logout', logout);
+router.get('/logout', logout);
 router.get('/getLoggedInUser', authMiddleware, getLoggedInUser)
 
 module.exports = router;

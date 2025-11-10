@@ -54,16 +54,49 @@ async function createBlog(req, res) {
 }
 
 async function getSingleBlog(req, res) {
-  try {
+try {
     const { blogId } = req.params;
 
-    const getBlog = await blogModel.findOne({ _id: blogId });
+    console.log('🔄 getSingleBlog called for:', blogId);
+    console.log('📋 Session ID:', req.sessionID);
+    console.log('💾 Current session:', req.session);
+    console.log('👀 Viewed blogs in session:', req.session?.viewedBlogs);
+
+    let getBlog = await blogModel.findOne({ _id: blogId });
 
     if (!getBlog) {
       return res.status(404).json({
         success: false,
         message: "404 Page Not Found",
       });
+    }
+
+    // Initialize session if it doesn't exist
+    if (!req.session.viewedBlogs) {
+      req.session.viewedBlogs = [];
+      console.log('✅ Initialized viewedBlogs array');
+    }
+
+    // Check if blog hasn't been viewed in this session
+    const hasViewed = req.session.viewedBlogs.includes(blogId.toString());
+    console.log('❓ Has viewed this blog:', hasViewed);
+
+    if (!hasViewed) {
+      console.log('⬆️ Incrementing views for blog:', blogId);
+      
+      // Increment views in database
+      await blogModel.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
+      
+      // Update the local blog object for response
+      getBlog.views += 1;
+      
+      // Add to viewed blogs in session
+      req.session.viewedBlogs.push(blogId.toString());
+      
+      console.log('✅ Added to viewed blogs. New count:', getBlog.views);
+      console.log('📋 Updated viewedBlogs:', req.session.viewedBlogs);
+    } else {
+      console.log('⏭️ Already viewed, skipping increment');
     }
 
     res.status(200).json({ success: true, singleBlog: getBlog });
@@ -97,9 +130,9 @@ async function blogLiked(req, res) {
       { new: true } // always return the new document
     );
 
-    console.log(updatedBlog, blog)
-
-    res.status(200).json({success: true, message: !blog ? "Liked" : "Disliked"})
+    res
+      .status(200)
+      .json({ success: true, message: !blog ? "Liked" : "Disliked" });
   } catch (error) {
     console.log("Error from blogLiked Controller: ", error.message);
   }
