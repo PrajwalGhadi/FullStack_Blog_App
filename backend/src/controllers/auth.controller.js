@@ -164,6 +164,8 @@ async function getLoggedInUser(req, res) {
   }
 }
 
+
+
 module.exports = {
   register,
   login,

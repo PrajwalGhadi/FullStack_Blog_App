@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     },
 
     // Optional field I will take this info later after user registration is done
-    fullName: {
+    firstName: {
       type: String,
       trim: true,
     },

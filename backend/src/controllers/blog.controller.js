@@ -54,13 +54,13 @@ async function createBlog(req, res) {
 }
 
 async function getSingleBlog(req, res) {
-try {
+  try {
     const { blogId } = req.params;
 
-    console.log('🔄 getSingleBlog called for:', blogId);
-    console.log('📋 Session ID:', req.sessionID);
-    console.log('💾 Current session:', req.session);
-    console.log('👀 Viewed blogs in session:', req.session?.viewedBlogs);
+    console.log("🔄 getSingleBlog called for:", blogId);
+    console.log("📋 Session ID:", req.sessionID);
+    console.log("💾 Current session:", req.session);
+    console.log("👀 Viewed blogs in session:", req.session?.viewedBlogs);
 
     let getBlog = await blogModel.findOne({ _id: blogId });
 
@@ -74,29 +74,29 @@ try {
     // Initialize session if it doesn't exist
     if (!req.session.viewedBlogs) {
       req.session.viewedBlogs = [];
-      console.log('✅ Initialized viewedBlogs array');
+      console.log("✅ Initialized viewedBlogs array");
     }
 
     // Check if blog hasn't been viewed in this session
     const hasViewed = req.session.viewedBlogs.includes(blogId.toString());
-    console.log('❓ Has viewed this blog:', hasViewed);
+    console.log("❓ Has viewed this blog:", hasViewed);
 
     if (!hasViewed) {
-      console.log('⬆️ Incrementing views for blog:', blogId);
-      
+      console.log("⬆️ Incrementing views for blog:", blogId);
+
       // Increment views in database
       await blogModel.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
-      
+
       // Update the local blog object for response
       getBlog.views += 1;
-      
+
       // Add to viewed blogs in session
       req.session.viewedBlogs.push(blogId.toString());
-      
-      console.log('✅ Added to viewed blogs. New count:', getBlog.views);
-      console.log('📋 Updated viewedBlogs:', req.session.viewedBlogs);
+
+      console.log("✅ Added to viewed blogs. New count:", getBlog.views);
+      console.log("📋 Updated viewedBlogs:", req.session.viewedBlogs);
     } else {
-      console.log('⏭️ Already viewed, skipping increment');
+      console.log("⏭️ Already viewed, skipping increment");
     }
 
     res.status(200).json({ success: true, singleBlog: getBlog });
@@ -150,10 +150,45 @@ async function fetchUserBlogs(req, res) {
   }
 }
 
+async function updateUserDetails(req, res) {
+  try {
+    const { username, email, bio, firstname, lastname } = req.body;
+    const file = req.file;
+    const result = null;
+    if (file) {
+      result = await generateImageUrl(
+        file.buffer,
+        `${file.originalname}_${uuidv4()}`
+      );
+    }
+
+    const user = await userModel.findById(req.user.id);
+
+    await userModel.findByIdAndUpdate(req.user.id, {
+      $set: {
+        username: username || user.username,
+        email: email || user.email,
+        bio: bio || user.bio,
+        firstName: firstname || user.firstName,
+        lastName: lastname || user.lastName,
+        profilePicture: result?.url || user.profilePicture,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "User Details Updated Successfully" });
+  } catch (error) {
+    console.log("Error from updatedUserDetails Controller: ", error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 module.exports = {
   getAllBlogs,
   createBlog,
   getSingleBlog,
   fetchUserBlogs,
   blogLiked,
+  updateUserDetails,
 };
