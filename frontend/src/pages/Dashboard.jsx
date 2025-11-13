@@ -12,6 +12,7 @@ import PostDashboard from "./Dashboards/PostDashboard";
 import UserDashboard from "./Dashboards/UserDashboard";
 import SettingDashboard from "./Dashboards/SettingDashboard";
 import {formatCreatedAt} from '../components/DateConverter'
+import UserProfile from "./UserProfile";
 
 const Dashboard = () => {
   // useContext functions
@@ -66,11 +67,16 @@ const Dashboard = () => {
         <aside className="lg:w-[15%] lg:h-full border-r border-gray-400 flex flex-col lg:px-5 gap-5 ">
           <div className="profile lg:flex gap-2 mt-4 justify-between items-center p-2 rounded-xl shadow-xl bg-[#facd7bde] hidden">
             <div className="border border-gray-400 w-16 h-12 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-              <FaRegUser className="text-xl lg:text-xl text-gray-800" />
+              {user ? user.map(user => {
+                return (
+                  <img key={user._id} src={`${user.profilePicture}`} className="w-full h-full aspect-auto rounded-full"/>
+                )
+              }) : <FaRegUser className="text-xl lg:text-xl text-gray-800" />}
+              
             </div>
 
             <div className="flex flex-col w-full">
-              <h1 className="font-semibold paragraph-body">{user?.map(user => user.username)}</h1>
+              <h1 className="font-semibold paragraph-body">{user?.map(user => user.firstName + ' ' +user.lastName)}</h1>
               <p className="text-sm text-gray-600 italic">
                 {user?.map(user => formatCreatedAt(user?.createdAt))}
               </p>
@@ -160,7 +166,7 @@ const Dashboard = () => {
         <div className="w-full py-5 lg:mt-0 lg:py-0">
           {location?.pathname === '/dashboard' ? <UserDashboard user={user} blogs={blogs} /> : location.pathname === "/dashboard/myPosts" ? (
             <PostDashboard user={user} blogs={blogs} />
-          ) : location?.pathname === '/dashboard/settings' ? <SettingDashboard user={user} blogs={blogs}/>: null}
+          ) : location?.pathname === '/dashboard/settings' ? <SettingDashboard user={user} blogs={blogs}/>: location.pathname === "/dashboard/userProfile" ? <UserProfile user={user} blogs={blogs} /> : null}
         </div>
       </section>
     </>

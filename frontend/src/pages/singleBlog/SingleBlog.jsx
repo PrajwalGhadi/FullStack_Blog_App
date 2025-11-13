@@ -5,7 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineShare } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
-import { formatCreatedAt } from '../../components/DateConverter'
+import { formatCreatedAt } from "../../components/DateConverter";
 
 const SingleBlog = () => {
   const [singleBlog, setSingleBlog] = useState();
@@ -24,13 +24,11 @@ const SingleBlog = () => {
   async function handleLikedBtn(id) {
     const result = await blogLiked(id);
     if (!result.success) {
-      console.log(result.message)
-    }
-    else {
+      console.log(result.message);
+    } else {
       setLikedBtnClicked(!likedBtnClicked);
     }
   }
-
 
   useEffect(() => {
     let isMounted = true; // ✅ Track if component is mounted
@@ -104,15 +102,24 @@ const SingleBlog = () => {
               {/* User Details */}
               <div className="profile flex gap-4 justify-between items-center p-3 rounded-lg shadow-xl bg-[#ffe0a7]">
                 <div className="border border-gray-400 lg:w-15 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-                  <FaRegUser className="text-xl lg:text-2xl text-gray-800" />
+                  {loggedInUser ? (
+                    <img
+                      key={loggedInUser._id}
+                      src={`${loggedInUser?.profilePicture}`}
+                      className="w-full h-full aspect-auto rounded-full"
+                    />
+                  ) : (
+                    <FaRegUser className="text-xl lg:text-xl text-gray-800" />
+                  )}
                 </div>
 
                 <div className="flex flex-col lg:gap-2">
                   <h1 className="font-semibold text-lg lg:text-xl">
-                    {loggedInUser && loggedInUser.username}
+                    {loggedInUser ? loggedInUser?.firstName + ' ' + loggedInUser?.lastName : 'Anonymus'}
                   </h1>
                   <p className="text-md text-gray-600 italic">
-                    Published on {singleBlog && formatCreatedAt(singleBlog?.createdAt)}
+                    Published on{" "}
+                    {singleBlog && formatCreatedAt(singleBlog?.createdAt)}
                   </p>
                 </div>
               </div>
@@ -150,12 +157,22 @@ const SingleBlog = () => {
             <h1 className="paragraph-body font-bold">About the Author</h1>
             <div className="author flex items-center gap-5 p-2 shadow-xl rounded-lg bg-[#ffe0a7]">
               <div className="border border-gray-400 lg:w-15 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-                <FaRegUser className="text-2xl text-gray-800" />
+                {loggedInUser ? (
+                  <img
+                    key={loggedInUser._id}
+                    src={`${loggedInUser?.profilePicture}`}
+                    className="w-full h-full aspect-auto rounded-full"
+                  />
+                ) : (
+                  <FaRegUser className="text-xl lg:text-xl text-gray-800" />
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
-                <h1 className="text-md font-bold">{loggedInUser?.username}</h1>
-                <p className="text-sm text-blue-500">@{loggedInUser?.username}</p>
+                <h1 className="text-md font-bold">{loggedInUser ? loggedInUser?.firstName + ' ' + loggedInUser?.lastName : 'Anonymus'}</h1>
+                <p className="text-sm text-blue-500">
+                  @{loggedInUser?.username}
+                </p>
               </div>
             </div>
 

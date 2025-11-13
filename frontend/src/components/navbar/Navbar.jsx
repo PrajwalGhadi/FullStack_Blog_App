@@ -4,6 +4,7 @@ import { FaRegUser } from "react-icons/fa";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import UserProfile from "../../pages/UserProfile";
 
 const Navbar = ({ children }) => {
   const location = useLocation();
@@ -11,11 +12,18 @@ const Navbar = ({ children }) => {
 
   const [searchInput, setSearchInput] = useState("");
   const [allBlogs, setAllBlogs] = useState(null);
+  const [user, setUser] = useState(null);
+
   const [filterBlog, setFilterBlog] = useState(null);
+  const [userProfile, setUserProfile] = useState(false);
+  const { getAllPost, getLoggedInUser } = useContext(AuthContext);
 
-  const { getAllPost } = useContext(AuthContext);
+  // This will help me to hide the profile options after clicked
+  useEffect(() => {
+    setUserProfile((userProfile) => (!userProfile ? false : false));
+  }, [location.pathname]);
 
-  // ✅ Move state update to useEffect
+  //  Moved state update to useEffect
   useEffect(() => {
     if (allBlogs) {
       const filtered = allBlogs.filter((blog) =>
@@ -34,8 +42,13 @@ const Navbar = ({ children }) => {
     async function getBlogs() {
       try {
         const result = await getAllPost();
+        const response = await getLoggedInUser();
         if (result.success) {
           setAllBlogs(result.blogs);
+        }
+
+        if (response.success) {
+          setUser(response.user);
         }
       } catch (error) {
         console.log(error.message);
@@ -126,7 +139,7 @@ const Navbar = ({ children }) => {
           </Link>
         </div>
 
-        <div className="profile flex justify-between items-center gap-5 lg:gap-10">
+        <div className="profile flex justify-between items-center gap-5 lg:gap-10 relative">
           <div className="search relative">
             <form className="relative">
               <IoSearchOutline className="absolute text-2xl top-2 left-2 text-gray-600" />
@@ -142,14 +155,16 @@ const Navbar = ({ children }) => {
             </form>
 
             {searchInput.length > 0 ? (
-              <div className="absolute w-full py-1 max-h-75 z-2 bg-[#F3F4F6] px-2 overflow-auto flex flex-col gap-2">
+              <div className="absolute w-full py-2 max-h-75 z-2 bg-[#F3F4F6] px-2 overflow-auto flex flex-col gap-2 rounded-lg shadow-lg">
                 {filterBlog &&
                   filterBlog.map((blog) => {
                     return (
                       <Link
                         key={blog.id}
                         to={`/singleBlog/${blog?._id}`}
-                        onClick={()=> {setSearchInput('')}}
+                        onClick={() => {
+                          setSearchInput("");
+                        }}
                         className="w-full border border-gray-300 p-2 rounded-lg hover:bg-gray-200 block"
                       >
                         {blog?.title?.length > 50
@@ -161,9 +176,38 @@ const Navbar = ({ children }) => {
               </div>
             ) : null}
           </div>
-          <div className="border border-gray-400 lg:w-12 lg:h-12 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-            <FaRegUser className="text-xl lg:text-2xl text-gray-800" />
+
+          {/* User Profile */}
+          <div
+            className="border border-gray-400 lg:w-12 lg:h-12 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00] active:scale-96"
+            onClick={() => {
+              setUserProfile(!userProfile);
+            }}
+          >
+            {user ? (
+              <img
+                key={user._id}
+                src={`${user.profilePicture}`}
+                className="w-full h-full aspect-auto rounded-full"
+              />
+            ) : (
+              <FaRegUser className="text-xl lg:text-xl text-gray-800" />
+            )}
           </div>
+
+          {userProfile ? (
+            <div className="absolute w-[50%] top-14 right-0 z-1 flex flex-col items-end gap-2 shadow-lg py-4 px-2 rounded-lg bg-[#F3F4F6]">
+              <Link
+                to={"/dashboard/userProfile"}
+                className="border border-gray-400 w-full rounded-md p-2 text-center hover:bg-[#ff7b00] hover:text-white active:scale-96"
+              >
+                Profile
+              </Link>
+              <Link className="border border-red-400 w-full rounded-md p-2 text-center hover:bg-red-700 hover:text-white active:scale-96">
+                Logout
+              </Link>
+            </div>
+          ) : null}
         </div>
       </nav>
 

@@ -40,11 +40,33 @@ export const AuthProvider = ({ children }) => {
 
   async function userLogout() {
     try {
-      const result = await fetch("http://localhost:3000/api/auth/logout")
-      const data = await result.json()
-      return data
+      const result = await fetch("http://localhost:3000/api/auth/logout");
+      const data = await result.json();
+      return data;
     } catch (error) {
-      console.log('Error from userlogout function: ', error.message)
+      console.log("Error from userlogout function: ", error.message);
+    }
+  }
+
+  async function updateUserDetails(formData) {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/blogs/updateUserDetails",
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
+
+      console.log(response)
+
+      const data = await response.json();
+
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log("Error from the updateUserDetails: ", error.message);
     }
   }
 
@@ -85,9 +107,10 @@ export const AuthProvider = ({ children }) => {
   async function getSingleBlog(blogId) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/blogs/getSingleBlog/${blogId}`, {
+        `http://localhost:3000/api/blogs/getSingleBlog/${blogId}`,
+        {
           method: "GET",
-          credentials: 'include'
+          credentials: "include",
         }
       );
 
@@ -115,32 +138,38 @@ export const AuthProvider = ({ children }) => {
 
   async function blogLiked(blogId) {
     try {
-      console.log('Reached blogLiked', blogId)
-      const response = await fetch(`http://localhost:3000/api/blogs/blogLiked/${blogId}`,  {
-        method: 'GET',
-        credentials: 'include'
-      })
-
-      const data = await response.json();
-
-      return data
-    } catch (error) {
-      console.log('Frontend Error from userLiked Function: ', error.message)
-    }
-  }
-
-  async function getLoggedInUser() {
-    try {
-      const response = await fetch('http://localhost:3000/api/auth/getLoggedInUser', {
-        method: 'GET',
-        credentials: 'include'
-      })
+      console.log("Reached blogLiked", blogId);
+      const response = await fetch(
+        `http://localhost:3000/api/blogs/blogLiked/${blogId}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       const data = await response.json();
 
       return data;
     } catch (error) {
-      console.log('Frontend Error  from getLoggedInUser: ', error.message)
+      console.log("Frontend Error from userLiked Function: ", error.message);
+    }
+  }
+
+  async function getLoggedInUser() {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/auth/getLoggedInUser",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.log("Frontend Error  from getLoggedInUser: ", error.message);
     }
   }
   return (
@@ -149,12 +178,13 @@ export const AuthProvider = ({ children }) => {
         userRegister,
         userLogin,
         userLogout,
+        updateUserDetails,
         createPost,
         getAllPost,
         getSingleBlog,
         getUserBlog,
         blogLiked,
-        getLoggedInUser
+        getLoggedInUser,
       }}
     >
       {children}
