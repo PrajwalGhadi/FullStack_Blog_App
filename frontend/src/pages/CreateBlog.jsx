@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Editor from "react-simple-wysiwyg";
 import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
   const [title, setTitle] = useState("");

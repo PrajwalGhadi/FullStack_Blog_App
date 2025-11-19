@@ -76,14 +76,16 @@ const Dashboard = () => {
             </div>
 
             <div className="flex flex-col w-full">
-              <h1 className="font-semibold paragraph-body">{user?.map(user => user.firstName + ' ' +user.lastName)}</h1>
+              <h1 className="font-semibold paragraph-body">{user && user?.map(user => {user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : "Anonymous"})}</h1>
               <p className="text-sm text-gray-600 italic">
                 {user?.map(user => formatCreatedAt(user?.createdAt))}
               </p>
             </div>
           </div>
 
-          <div className="lg:p-5 py-2 px-4 shadow-lg lg:rounded-xl w-full flex lg:relative fixed overflow-scroll no-scrollbar bg-[#F3F4F6]">
+          <div className="lg:p-5 py-2 px-4 shadow-lg lg:rounded-xl w-full flex lg:relative fixed overflow-scroll no-scrollbar bg-[#F3F4F6] z-5">
             <div className="w-full flex flex-row justify-between lg:flex-col gap-2">
               {/* Each category has unique path */}
               <Link

@@ -15,6 +15,7 @@ const BlogRoutes = () => {
         <Route path="/category/:categoryName" element={<Home />} />
         <Route path="/singleBlog/:id" element = {<SingleBlog />} />
         <Route path="/createBlog" element={<CreateBlog />} />
+        <Route path="/createBlog/:id" element={<CreateBlog />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/:dashboardName" element={<Dashboard />} />
       </Routes>

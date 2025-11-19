@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+
   async function userRegister(username, email, password) {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -23,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   async function userLogin(username, password) {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
   async function userLogout() {
     try {
-      const result = await fetch("http://localhost:3000/api/auth/logout");
+      const result = await fetch(`${API_URL}/api/auth/logout`);
       const data = await result.json();
       return data;
     } catch (error) {
@@ -50,16 +52,13 @@ export const AuthProvider = ({ children }) => {
 
   async function updateUserDetails(formData) {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/blogs/updateUserDetails",
-        {
-          method: "POST",
-          credentials: "include",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API_URL}/api/blogs/updateUserDetails`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
-      console.log(response)
+      console.log(response);
 
       const data = await response.json();
 
@@ -72,14 +71,28 @@ export const AuthProvider = ({ children }) => {
 
   async function createPost(formData) {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/blogs/createBlog",
-        {
-          method: "POST",
-          credentials: "include",
-          body: formData,
-        }
-      );
+      const response = await fetch(`${API_URL}/api/blogs/createBlog`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log("Frontend Create Post Function Error: ", error.message);
+    }
+  }
+
+  async function udpatePost(blogId, formData) {
+    try {
+      const response = await fetch(`${API_URL}/api/blogs/updateBlog/${blogId}`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
       const data = await response.json();
 
@@ -92,9 +105,7 @@ export const AuthProvider = ({ children }) => {
 
   async function getAllPost() {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/blogs/getAllBlogs"
-      );
+      const response = await fetch(`${API_URL}/api/blogs/getAllBlogs`);
 
       const data = await response.json();
 
@@ -107,7 +118,7 @@ export const AuthProvider = ({ children }) => {
   async function getSingleBlog(blogId) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/blogs/getSingleBlog/${blogId}`,
+        `${API_URL}/api/blogs/getSingleBlog/${blogId}`,
         {
           method: "GET",
           credentials: "include",
@@ -124,7 +135,7 @@ export const AuthProvider = ({ children }) => {
 
   async function getUserBlog() {
     const response = await fetch(
-      "http://localhost:3000/api/blogs/getUserBlog/6904b8339013c67fd807e191",
+      `${API_URL}/api/blogs/getUserBlog/6904b8339013c67fd807e191`,
       {
         method: "GET",
         credentials: "include",
@@ -139,13 +150,10 @@ export const AuthProvider = ({ children }) => {
   async function blogLiked(blogId) {
     try {
       console.log("Reached blogLiked", blogId);
-      const response = await fetch(
-        `http://localhost:3000/api/blogs/blogLiked/${blogId}`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${API_URL}/api/blogs/blogLiked/${blogId}`, {
+        method: "GET",
+        credentials: "include",
+      });
 
       const data = await response.json();
 
@@ -157,10 +165,25 @@ export const AuthProvider = ({ children }) => {
 
   async function getLoggedInUser() {
     try {
+      const response = await fetch(`${API_URL}/api/auth/getLoggedInUser`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.log("Frontend Error  from getLoggedInUser: ", error.message);
+    }
+  }
+
+  async function deleteBlog(blogId) {
+    try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/getLoggedInUser",
+        `${API_URL}/api/blogs/deleteBlog/${blogId}`,
         {
-          method: "GET",
+          method: "DELETE",
           credentials: "include",
         }
       );
@@ -169,7 +192,7 @@ export const AuthProvider = ({ children }) => {
 
       return data;
     } catch (error) {
-      console.log("Frontend Error  from getLoggedInUser: ", error.message);
+      console.log("Error from deleteBlog: ", error.message);
     }
   }
   return (
@@ -185,6 +208,8 @@ export const AuthProvider = ({ children }) => {
         getUserBlog,
         blogLiked,
         getLoggedInUser,
+        deleteBlog,
+        udpatePost
       }}
     >
       {children}

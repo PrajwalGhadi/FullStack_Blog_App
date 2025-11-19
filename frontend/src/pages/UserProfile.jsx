@@ -97,8 +97,8 @@ const UserProfile = ({ user: propUser, blogs: propBlogs }) => {
               className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 shadow-lg"
               data-alt="User avatar image with an abstract pattern"
               style={{
-                backgroundImage: `${
-                  `url(${userAvatar})` ||
+                backgroundImage: `${ userAvatar ? 
+                  `url(${userAvatar})` :
                   'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCrTGUKyyqw5CD04XrmsBMRbDQ1aFaUrXbC_aErZbwF131Y6TUUt5GMWUfvHu_uOvwTmf5g2AYDyh_JZP03z4ER0BpwnjVnoB99LpO63B2EKt31KYU6RKuZB9wy7550cKpxLHJdg5_geRDI-4Ik11FyEW1YqY5e0r-ELf0obHGswFIttWh-9hPN6uZljhn78qy4j-F5PKE4Hh94IvEKaiU8xHFoJpZgIHYYj6BsLukhfNZQKe0ECpCfoC7cUYGGxBl6j-KvpM4cAvQ")'
                 }`,
               }}

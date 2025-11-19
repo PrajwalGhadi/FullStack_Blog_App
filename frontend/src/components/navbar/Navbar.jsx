@@ -184,7 +184,7 @@ const Navbar = ({ children }) => {
               setUserProfile(!userProfile);
             }}
           >
-            {user ? (
+            {user?.profilePicture ? (
               <img
                 key={user._id}
                 src={`${user.profilePicture}`}

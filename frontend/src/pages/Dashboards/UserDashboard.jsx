@@ -5,8 +5,12 @@ import { IoEyeOutline } from "react-icons/io5";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 import {formatCreatedAt} from '../../components/DateConverter'
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = ({ user, blogs }) => {
+
+  const navigate = useNavigate()
+
   const totalLikes =
     blogs &&
     blogs.reduce((accumulator, blog) => {
@@ -37,7 +41,7 @@ const UserDashboard = ({ user, blogs }) => {
 
           <button
             onClick={() => {
-              navigate("/createBlog");
+              navigate("/dashboard/myPosts");
             }}
             className="w-fit p-3 rounded-lg border border-amber-400 font-medium paragraph-body flex justify-center items-center gap-2"
           >
@@ -71,7 +75,7 @@ const UserDashboard = ({ user, blogs }) => {
               <div className="flex justify-center items-center gap-2">
                 <GoDotFill className="text-yellow-500" />
                 <div>
-                  <h1 className="text-lg">{blogs && blogs.length}</h1>
+                  <h1 className="text-lg">0</h1>
                   <p className="text-gray-500 text-sm">Draft</p>
                 </div>
               </div>

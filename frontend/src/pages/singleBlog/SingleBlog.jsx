@@ -9,6 +9,7 @@ import { formatCreatedAt } from "../../components/DateConverter";
 
 const SingleBlog = () => {
   const [singleBlog, setSingleBlog] = useState();
+  const [userPostedBlog, setUserPostedBlog] = useState();
   const [allBlog, setAllBlog] = useState();
   const [loggedInUser, setLoggedInUser] = useState();
   const [likeMessage, setLikeMessage] = useState();
@@ -49,6 +50,7 @@ const SingleBlog = () => {
 
         if (response.success && getAllBlog.success) {
           setSingleBlog(response.singleBlog);
+          setUserPostedBlog(response.userPostedBlog);
           setAllBlog(
             getAllBlog.blogs?.filter(
               (blog) =>
@@ -102,10 +104,10 @@ const SingleBlog = () => {
               {/* User Details */}
               <div className="profile flex gap-4 justify-between items-center p-3 rounded-lg shadow-xl bg-[#ffe0a7]">
                 <div className="border border-gray-400 lg:w-15 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-                  {loggedInUser ? (
+                  {userPostedBlog?.profilePicture ? (
                     <img
-                      key={loggedInUser._id}
-                      src={`${loggedInUser?.profilePicture}`}
+                      key={userPostedBlog && userPostedBlog._id}
+                      src={`${userPostedBlog && userPostedBlog.profilePicture}`}
                       className="w-full h-full aspect-auto rounded-full"
                     />
                   ) : (
@@ -115,7 +117,11 @@ const SingleBlog = () => {
 
                 <div className="flex flex-col lg:gap-2">
                   <h1 className="font-semibold text-lg lg:text-xl">
-                    {loggedInUser ? loggedInUser?.firstName + ' ' + loggedInUser?.lastName : 'Anonymus'}
+                    {userPostedBlog
+                      ? userPostedBlog?.firstName +
+                        " " +
+                        userPostedBlog?.lastName
+                      : "Anonymus"}
                   </h1>
                   <p className="text-md text-gray-600 italic">
                     Published on{" "}
@@ -157,7 +163,7 @@ const SingleBlog = () => {
             <h1 className="paragraph-body font-bold">About the Author</h1>
             <div className="author flex items-center gap-5 p-2 shadow-xl rounded-lg bg-[#ffe0a7]">
               <div className="border border-gray-400 lg:w-15 lg:h-15 w-10 h-10 rounded-full flex justify-center items-center hover:border-[#ff7b00]">
-                {loggedInUser ? (
+                {loggedInUser?.profilePicture ? (
                   <img
                     key={loggedInUser._id}
                     src={`${loggedInUser?.profilePicture}`}
@@ -169,7 +175,11 @@ const SingleBlog = () => {
               </div>
 
               <div className="flex flex-col gap-1">
-                <h1 className="text-md font-bold">{loggedInUser ? loggedInUser?.firstName + ' ' + loggedInUser?.lastName : 'Anonymus'}</h1>
+                <h1 className="text-md font-bold">
+                  {loggedInUser?.firstName && loggedInUser?.lastName
+                    ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
+                    : "Anonymous"}
+                </h1>
                 <p className="text-sm text-blue-500">
                   @{loggedInUser?.username}
                 </p>
