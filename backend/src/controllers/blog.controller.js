@@ -57,12 +57,9 @@ async function getSingleBlog(req, res) {
   try {
     const { blogId } = req.params;
 
-    console.log("🔄 getSingleBlog called for:", blogId);
-    console.log("📋 Session ID:", req.sessionID);
-    console.log("💾 Current session:", req.session);
-    console.log("👀 Viewed blogs in session:", req.session?.viewedBlogs);
-
     let getBlog = await blogModel.findOne({ _id: blogId });
+
+    let userPostedBlog = await userModel.findById(getBlog.author);
 
     if (!getBlog) {
       return res.status(404).json({
@@ -92,14 +89,17 @@ async function getSingleBlog(req, res) {
 
       // Add to viewed blogs in session
       req.session.viewedBlogs.push(blogId.toString());
-
-      console.log("✅ Added to viewed blogs. New count:", getBlog.views);
-      console.log("📋 Updated viewedBlogs:", req.session.viewedBlogs);
     } else {
       console.log("⏭️ Already viewed, skipping increment");
     }
 
-    res.status(200).json({ success: true, singleBlog: getBlog });
+    res
+      .status(200)
+      .json({
+        success: true,
+        singleBlog: getBlog,
+        userPostedBlog: userPostedBlog,
+      });
   } catch (error) {
     console.log("Error from GetSingleBlog controller: ", error.message);
     res.status(500).json({
@@ -184,6 +184,50 @@ async function updateUserDetails(req, res) {
   }
 }
 
+async function deleteBlog(req, res) {
+  try {
+    await blogModel.findByIdAndDelete(req.params.id);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Blog Deleted Successfully" });
+  } catch (error) {
+    console.log("Error from DeleteBlog: ", error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+async function updateBlog(req, res) {
+  try {
+
+    console.log('viewing req.body of updateBlog: ', req.body);
+    console.log('viewing req.param of updateBlog: ', req.params);
+    const {title, content, category} = req.body;
+    const file = req.file
+
+    // const result = await generateImageUrl(
+    //   file.buffer,
+    //   `${file.originalname}_${uuidv4()}`
+    // );
+
+    const blog = await blogModel.findByIdAndUpdate(req.params.id, {
+      $set: {
+        title,
+        content,
+        author: req.user.id,
+        authorName: req.user.fullName,
+        category,
+        // imageUrl: result.url,
+      },
+    });
+
+    res.status(200).json({success: true, message: 'Blog Updated Successfully'})
+  } catch (error) {
+    console.log("Error from updateBlog: ", error.message);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+
 module.exports = {
   getAllBlogs,
   createBlog,
@@ -191,4 +235,6 @@ module.exports = {
   fetchUserBlogs,
   blogLiked,
   updateUserDetails,
+  deleteBlog,
+  updateBlog
 };

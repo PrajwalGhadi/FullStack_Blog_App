@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllBlogs, createBlog, getSingleBlog, fetchUserBlogs, blogLiked, updateUserDetails } = require('../controllers/blog.controller');
+const { getAllBlogs, createBlog, getSingleBlog, fetchUserBlogs, blogLiked, updateUserDetails, deleteBlog, updateBlog } = require('../controllers/blog.controller');
 const  authMiddleware = require('../middlewares/auth.middleware')
 const multer = require('multer')
 
@@ -22,7 +22,10 @@ router.get('/blogLiked/:id', authMiddleware, blogLiked);
 // Create blog route with better error handling
 router.post('/createBlog', upload.single("image"), authMiddleware, createBlog)// Call your controller
 
+router.post('/updateBlog/:id', upload.single("image"), authMiddleware, updateBlog)// Call your controller
+
 router.post('/updateUserDetails', upload.single("image"), authMiddleware, updateUserDetails)
 
+router.delete('/deleteBlog/:id', authMiddleware, deleteBlog)
 
 module.exports = router;
