@@ -43,11 +43,15 @@ const register = async (req, res) => {
     );
 
     //Setting Cookie
+    const isProd = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: "none",
-      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+
+      // Conditional logic: Production uses Secure/None; Local uses Lax/Non-Secure
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
     });
 
     res.status(201).json({
@@ -105,12 +109,11 @@ const login = async (req, res) => {
     // Setting Cookie
     res.cookie("token", token, {
       httpOnly: true,
-      // CRITICAL FIX: Only set secure: true when running in production/HTTPS
-      secure: isProduction,
-      // CRITICAL FIX: SameSite='none' REQUIRES Secure: true.
-      // If Secure is false, SameSite must be 'lax' or 'strict'.
-      sameSite: isProduction ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000,
+
+      // Conditional logic: Production uses Secure/None; Local uses Lax/Non-Secure
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
     });
 
     res.status(200).json({
@@ -132,10 +135,8 @@ const login = async (req, res) => {
 const logout = (req, res) => {
   try {
     res.cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0), // ✅ Immediate expiration (better than maxAge: 1)
-      sameSite: "none",
-      secure: true,
+      ...cookieOptions, // Includes secure and sameSite
+      expires: new Date(0), // Overrides maxAge
     });
 
     // ✅ Destroy session if you're using sessions
@@ -163,8 +164,6 @@ async function getLoggedInUser(req, res) {
     console.log("Error from getLoggedInUser Controller: ", error.message);
   }
 }
-
-
 
 module.exports = {
   register,
