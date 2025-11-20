@@ -4,6 +4,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
