@@ -104,7 +104,7 @@ const login = async (req, res) => {
       }
     );
 
-    const isProduction = process.env.NODE_ENV === "production";
+    const isProd = process.env.NODE_ENV === "production";
 
     // Setting Cookie
     res.cookie("token", token, {
