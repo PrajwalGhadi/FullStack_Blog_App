@@ -4,7 +4,7 @@ const app = express();
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
-app.set('trust proxy', true);
+app.set("trust proxy", true);
 
 app.use(
   session({
@@ -13,14 +13,14 @@ app.use(
     saveUninitialized: false,
 
     cookie: {
-      // CRITICAL: MUST be true because Render uses HTTPS
       secure: true,
-
-      // CRITICAL: MUST be 'none' for cookies to be sent from Netlify (Origin) to Render (API)
       sameSite: "none",
-
       maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
+
+      // ✨ NEW LINE: Set the domain explicitly
+      // NOTE: Remove the protocol (https://) and any trailing slash.
+      domain: "fullstack-blog-app-2783.onrender.com",
     },
 
     store: MongoStore.create({

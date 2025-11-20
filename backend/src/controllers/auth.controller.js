@@ -52,6 +52,7 @@ const register = async (req, res) => {
       // Conditional logic: Production uses Secure/None; Local uses Lax/Non-Secure
       secure: isProd,
       sameSite: isProd ? "none" : "lax",
+      domain: isProd ? "fullstack-blog-app-2783.onrender.com" : "localhost",
     });
 
     res.status(201).json({
@@ -114,6 +115,7 @@ const login = async (req, res) => {
       // Conditional logic: Production uses Secure/None; Local uses Lax/Non-Secure
       secure: isProd,
       sameSite: isProd ? "none" : "lax",
+      domain: isProd ? "fullstack-blog-app-2783.onrender.com" : "localhost",
     });
 
     res.status(200).json({
