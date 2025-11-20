@@ -26,9 +26,17 @@ const cookieParser = require("cookie-parser");
 
 const cors = require("cors");
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://192.168.1.13:5173', 'http://localhost:3000', 'https://full-stack-blog-app1.vercel.app/', 'https://blogingapp1.netlify.app/'],
+    origin: [
+        'http://localhost:5173', 
+        'http://127.0.0.1:5173', 
+        'http://192.168.1.13:5173', 
+        'http://localhost:3000', 
+        // 👇 CORRECTED: Removed trailing slash
+        'https://full-stack-blog-app1.vercel.app', 
+        'https://blogingapp1.netlify.app' // 👇 CORRECTED: Removed trailing slash
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // If you're sending cookies/auth headers
+    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 

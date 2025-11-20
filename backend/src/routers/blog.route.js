@@ -7,7 +7,7 @@ const multer = require('multer')
 const upload = multer({storage: multer.memoryStorage()})
 
 // Simple test route without file upload first
-router.get('/test', authMiddleware, (req, res) => {
+router.get('/test', (req, res) => {
   res.json({ message: 'Blog route working' });
 });
 
